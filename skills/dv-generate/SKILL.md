@@ -676,6 +676,6 @@ Files must sit at the **zip root** — `-j` (junk paths) is required.
 
 11. **Simple boolean properties** — use `<IsCustomizable>1</IsCustomizable>`, NOT `<IsCustomizable><Value>1</Value><CanModify>1</CanModify></IsCustomizable>`. The compound form triggers "string '11' is not a valid Boolean value" on import.
 
-12. **Boolean attribute type vs optionset type** — the attribute element uses `<Type>bit</Type>`; the nested optionset uses `<OptionSetType>bool</OptionSetType>`. Using `bool` as the attribute type causes "Unable to find attribute type by name bool" on import.
+12. **Boolean (Two Options) uses two different type values** — `<Type>bit</Type>` (physical storage, on the attribute) and `<OptionSetType>bool</OptionSetType>` (option set category, inside `<optionset>`). These are NOT interchangeable. Using `bool` for `<Type>` causes "Unable to find attribute type by name bool" on import; using `bit` for `<OptionSetType>` causes the field to render as non-editable in the form.
 
-13. **Boolean fields require `<DefaultValue>0</DefaultValue>`** placed immediately before `<optionset>`. Without it the field renders as read-only in the model-driven app form.
+13. **Boolean fields require `<DefaultValue>`** — without `<DefaultValue>0</DefaultValue>` (or `1`) the field renders as read-only / non-interactive in the model-driven form. Always include it immediately before the `<optionset>` element.
