@@ -1,11 +1,31 @@
 ---
 name: dv-generate
-description: Generate source-controlled Dataverse solution XML files (customizations.xml, solution.xml, pack.sh) without a live environment. Use when the user wants to create a new solution from scratch, add tables/fields/views/forms, or scaffold a model-driven app with AppModule and SiteMap. All patterns are verified-working from the NeilHaddley/Financials and TodoSolution projects.
+description: Generate source-controlled Dataverse solution XML files (customizations.xml, solution.xml, pack.sh) without a live environment. Use when the user wants to create a new solution from scratch, add tables/fields/views/forms, or scaffold a model-driven app with AppModule and SiteMap. Always ask for the publisher prefix before generating any XML.
 ---
 
 # Skill: Dataverse Solution Generation (Source-Controlled XML)
 
 Generate zip-importable Power Platform solutions from plain XML files on disk. No live environment required during authoring. Import via `pac solution import` or make.powerapps.com.
+
+---
+
+## Publisher prefix — ask first
+
+**Always confirm the publisher prefix before generating any XML.** The prefix is prepended to every table, column, option set, app, and site map schema name. It is set once per publisher and cannot be changed after components are created.
+
+Ask the user:
+> "What publisher prefix should I use? (e.g., `contoso`, `sa`, `lit` — 2–8 lowercase letters, no numbers or hyphens)"
+
+Then substitute `{{prefix}}_` everywhere in the templates below.
+
+**Never use `new_`** — it is the default Microsoft prefix and causes naming collisions.
+
+The publisher block in `solution.xml` also needs:
+- `<UniqueName>` — a PascalCase identifier for the publisher (e.g., `ContosoInc`)
+- `<CustomizationPrefix>` — the lowercase prefix (e.g., `contoso`)
+- `<CustomizationOptionValuePrefix>` — a unique integer (e.g., `10000`); must not clash with other publishers in the same environment
+
+---
 
 ## Skill boundaries
 
@@ -63,15 +83,15 @@ The root `<ImportExportXml>` element **must** include all version attributes sho
     <Version>1.0.0.0</Version>
     <Managed>0</Managed>
     <Publisher>
-      <UniqueName>NeilHaddley</UniqueName>
+      <UniqueName>{{PublisherUniqueName}}</UniqueName>
       <LocalizedNames>
-        <LocalizedName description="Neil Haddley" languagecode="1033" />
+        <LocalizedName description="{{Publisher Display Name}}" languagecode="1033" />
       </LocalizedNames>
       <Descriptions/>
-      <EMailAddress>neil@haddley.com</EMailAddress>
+      <EMailAddress>{{publisher@email.com}}</EMailAddress>
       <SupportingWebsiteUrl xsi:nil="true"></SupportingWebsiteUrl>
-      <CustomizationPrefix>neil</CustomizationPrefix>
-      <CustomizationOptionValuePrefix>10000</CustomizationOptionValuePrefix>
+      <CustomizationPrefix>{{prefix}}</CustomizationPrefix>
+      <CustomizationOptionValuePrefix>{{OptionValuePrefix}}</CustomizationOptionValuePrefix>
       <Addresses>
         <Address>
           <AddressNumber>1</AddressNumber><AddressTypeCode>1</AddressTypeCode>
@@ -115,10 +135,10 @@ The root `<ImportExportXml>` element **must** include all version attributes sho
     </Publisher>
     <RootComponents>
       <!-- One entry per entity: type="1" -->
-      <RootComponent type="1" schemaName="neil_{{entity}}" behavior="0" />
+      <RootComponent type="1" schemaName="{{prefix}}_{{entity}}" behavior="0" />
       <!-- If including a model-driven app: -->
-      <RootComponent type="62" schemaName="neil_{{appname}}" behavior="0" />
-      <RootComponent type="80" schemaName="neil_{{appname}}" behavior="0" />
+      <RootComponent type="62" schemaName="{{prefix}}_{{appname}}" behavior="0" />
+      <RootComponent type="80" schemaName="{{prefix}}_{{appname}}" behavior="0" />
     </RootComponents>
     <!-- Required when solution includes an AppModule -->
     <MissingDependencies>
@@ -128,7 +148,7 @@ The root `<ImportExportXml>` element **must** include all version attributes sho
             solution="AppModuleWebResources (2.5)">
           <package appName="AppModule Web Resources Package" version="2.5">AppModuleWebResources (2.5)</package>
         </Required>
-        <Dependent type="80" schemaName="neil_{{appname}}" displayName="{{App Display Name}}" />
+        <Dependent type="80" schemaName="{{prefix}}_{{appname}}" displayName="{{App Display Name}}" />
       </MissingDependency>
       <MissingDependency>
         <Required type="SettingDefinition" displayName="AppChannel"
@@ -137,8 +157,8 @@ The root `<ImportExportXml>` element **must** include all version attributes sho
           <package appName="PowerAppsAppFramework Package" version="1.0.0.25">PowerAppsAppFramework_Anchor (1.0.0.25)</package>
         </Required>
         <Dependent type="AppSetting"
-            displayName="parentappmoduleid.uniquename=neil_{{appname}},settingdefinitionid.uniquename=AppChannel"
-            id.parentappmoduleid.uniquename="neil_{{appname}}"
+            displayName="parentappmoduleid.uniquename={{prefix}}_{{appname}},settingdefinitionid.uniquename=AppChannel"
+            id.parentappmoduleid.uniquename="{{prefix}}_{{appname}}"
             id.settingdefinitionid.uniquename="AppChannel" />
       </MissingDependency>
     </MissingDependencies>
@@ -173,16 +193,16 @@ The root `<ImportExportXml>` element **must** include all version attributes sho
 
 ```xml
 <Entity>
-  <Name LocalizedName="{{Display Name}}" OriginalName="{{Display Name}}">neil_{{entity}}</Name>
+  <Name LocalizedName="{{Display Name}}" OriginalName="{{Display Name}}">{{prefix}}_{{entity}}</Name>
   <EntityInfo>
-    <entity Name="neil_{{entity}}">
+    <entity Name="{{prefix}}_{{entity}}">
       <LocalizedNames><LocalizedName description="{{Display Name}}" languagecode="1033" /></LocalizedNames>
       <LocalizedCollectionNames><LocalizedCollectionName description="{{Plural Name}}" languagecode="1033" /></LocalizedCollectionNames>
       <Descriptions><Description description="" languagecode="1033" /></Descriptions>
       <attributes>
         <!-- ALL attribute elements go here FIRST -->
       </attributes>
-      <EntitySetName>neil_{{entities}}</EntitySetName>
+      <EntitySetName>{{prefix}}_{{entities}}</EntitySetName>
       <IsDuplicateCheckSupported>1</IsDuplicateCheckSupported>
       <IsBusinessProcessEnabled>0</IsBusinessProcessEnabled>
       <IsRequiredOffline>0</IsRequiredOffline>
@@ -270,8 +290,8 @@ All attributes share the same scaffold. Key rules:
 ### Text (nvarchar) — short text
 
 ```xml
-<attribute PhysicalName="neil_{{fieldname}}">
-  <Type>nvarchar</Type><Name>neil_{{fieldname}}</Name><LogicalName>neil_{{fieldname}}</LogicalName>
+<attribute PhysicalName="{{prefix}}_{{fieldname}}">
+  <Type>nvarchar</Type><Name>{{prefix}}_{{fieldname}}</Name><LogicalName>{{prefix}}_{{fieldname}}</LogicalName>
   <RequiredLevel>none</RequiredLevel>
   <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
   <ImeMode>auto</ImeMode>
@@ -306,8 +326,8 @@ Use `<Type>nvarchar</Type>` + `<Format>textarea</Format>`. **`<Type>memo</Type>`
 ### Decimal / Currency
 
 ```xml
-<attribute PhysicalName="neil_{{fieldname}}">
-  <Type>decimal</Type><Name>neil_{{fieldname}}</Name><LogicalName>neil_{{fieldname}}</LogicalName>
+<attribute PhysicalName="{{prefix}}_{{fieldname}}">
+  <Type>decimal</Type><Name>{{prefix}}_{{fieldname}}</Name><LogicalName>{{prefix}}_{{fieldname}}</LogicalName>
   <RequiredLevel>none</RequiredLevel>
   <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
   <ImeMode>inactive</ImeMode>
@@ -351,8 +371,8 @@ Replace the precision/min/max block with:
 Option values start at `100000000` (publisher option prefix `10000` × 10000).
 
 ```xml
-<attribute PhysicalName="neil_{{fieldname}}">
-  <Type>picklist</Type><Name>neil_{{fieldname}}</Name><LogicalName>neil_{{fieldname}}</LogicalName>
+<attribute PhysicalName="{{prefix}}_{{fieldname}}">
+  <Type>picklist</Type><Name>{{prefix}}_{{fieldname}}</Name><LogicalName>{{prefix}}_{{fieldname}}</LogicalName>
   <RequiredLevel>none</RequiredLevel>
   <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
   <ImeMode>auto</ImeMode>
@@ -365,7 +385,7 @@ Option values start at `100000000` (publisher option prefix `10000` × 10000).
   <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings><CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
   <IsDataSourceSecret>0</IsDataSourceSecret><AutoNumberFormat></AutoNumberFormat>
   <IsSearchable>0</IsSearchable><IsFilterable>1</IsFilterable><IsRetrievable>1</IsRetrievable><IsLocalizable>0</IsLocalizable>
-  <optionset Name="neil_{{fieldname}}">
+  <optionset Name="{{prefix}}_{{fieldname}}">
     <OptionSetType>picklist</OptionSetType><IsGlobal>0</IsGlobal><IsCustomizable>1</IsCustomizable>
     <displaynames><displayname description="{{Field Label}}" languagecode="1033" /></displaynames>
     <Descriptions><Description description="" languagecode="1033" /></Descriptions>
@@ -384,8 +404,8 @@ Option values start at `100000000` (publisher option prefix `10000` × 10000).
 ### Boolean (Two Options)
 
 ```xml
-<attribute PhysicalName="neil_{{fieldname}}">
-  <Type>bool</Type><Name>neil_{{fieldname}}</Name><LogicalName>neil_{{fieldname}}</LogicalName>
+<attribute PhysicalName="{{prefix}}_{{fieldname}}">
+  <Type>bool</Type><Name>{{prefix}}_{{fieldname}}</Name><LogicalName>{{prefix}}_{{fieldname}}</LogicalName>
   <RequiredLevel>none</RequiredLevel>
   <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
   <ImeMode>auto</ImeMode>
@@ -398,7 +418,7 @@ Option values start at `100000000` (publisher option prefix `10000` × 10000).
   <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings><CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
   <IsDataSourceSecret>0</IsDataSourceSecret><AutoNumberFormat></AutoNumberFormat>
   <IsSearchable>0</IsSearchable><IsFilterable>1</IsFilterable><IsRetrievable>1</IsRetrievable><IsLocalizable>0</IsLocalizable>
-  <optionset Name="neil_{{fieldname}}">
+  <optionset Name="{{prefix}}_{{fieldname}}">
     <OptionSetType>bool</OptionSetType><IsGlobal>0</IsGlobal><IsCustomizable>1</IsCustomizable>
     <displaynames><displayname description="{{Field Label}}" languagecode="1033" /></displaynames>
     <Descriptions><Description description="" languagecode="1033" /></Descriptions>
@@ -416,7 +436,7 @@ Option values start at `100000000` (publisher option prefix `10000` × 10000).
 
 Every entity needs at minimum: a default list view (`querytype 0`) and a Quick Find view (`querytype 4`).
 
-**`returnedtypecode`** = entity logical name string (`neil_todo`), **not a number**.
+**`returnedtypecode`** = entity logical name string (`{{prefix}}_todo`), **not a number**.
 
 **GUIDs must be fresh per import attempt.** Failed-import GUIDs persist in the environment and cause re-import to fail. Generate:
 ```bash
@@ -432,24 +452,24 @@ For readability, use sequential-looking hex GUIDs like `{B1000001-0000-4000-8000
     <savedqueryid>{UNIQUE-GUID-1}</savedqueryid>
     <querytype>0</querytype>
     <name>All {{Plural Name}}</name>
-    <returnedtypecode>neil_{{entity}}</returnedtypecode>
+    <returnedtypecode>{{prefix}}_{{entity}}</returnedtypecode>
     <isdefault>1</isdefault><iscustom>1</iscustom><isquickfindquery>0</isquickfindquery>
     <IsCustomizable>1</IsCustomizable><CanBeDeleted>1</CanBeDeleted>
     <columnsetxml><columnset>
-      <column name="neil_{{field1}}"/><column name="neil_{{field2}}"/>
+      <column name="{{prefix}}_{{field1}}"/><column name="{{prefix}}_{{field2}}"/>
     </columnset></columnsetxml>
-    <layoutxml><grid name="resultset" object="neil_{{entity}}" jump="neil_{{primaryfield}}" select="1" preview="0" icon="1">
-      <row name="result" id="neil_{{entity}}id">
-        <cell name="neil_{{field1}}" width="200"/>
-        <cell name="neil_{{field2}}" width="150"/>
+    <layoutxml><grid name="resultset" object="{{prefix}}_{{entity}}" jump="{{prefix}}_{{primaryfield}}" select="1" preview="0" icon="1">
+      <row name="result" id="{{prefix}}_{{entity}}id">
+        <cell name="{{prefix}}_{{field1}}" width="200"/>
+        <cell name="{{prefix}}_{{field2}}" width="150"/>
       </row>
     </grid></layoutxml>
     <fetchxml><fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false">
-      <entity name="neil_{{entity}}">
-        <attribute name="neil_{{field1}}"/>
-        <attribute name="neil_{{field2}}"/>
-        <attribute name="neil_{{entity}}id"/>
-        <order attribute="neil_{{primaryfield}}" descending="false"/>
+      <entity name="{{prefix}}_{{entity}}">
+        <attribute name="{{prefix}}_{{field1}}"/>
+        <attribute name="{{prefix}}_{{field2}}"/>
+        <attribute name="{{prefix}}_{{entity}}id"/>
+        <order attribute="{{prefix}}_{{primaryfield}}" descending="false"/>
         <filter type="and"><condition attribute="statecode" operator="eq" value="0"/></filter>
       </entity>
     </fetch></fetchxml>
@@ -462,24 +482,24 @@ For readability, use sequential-looking hex GUIDs like `{B1000001-0000-4000-8000
     <savedqueryid>{UNIQUE-GUID-2}</savedqueryid>
     <querytype>4</querytype>
     <name>Quick Find {{Plural Name}}</name>
-    <returnedtypecode>neil_{{entity}}</returnedtypecode>
+    <returnedtypecode>{{prefix}}_{{entity}}</returnedtypecode>
     <isdefault>1</isdefault><iscustom>1</iscustom><isquickfindquery>1</isquickfindquery>
     <IsCustomizable>1</IsCustomizable><CanBeDeleted>1</CanBeDeleted>
     <columnsetxml><columnset>
-      <column name="neil_{{field1}}"/><column name="neil_{{field2}}"/>
+      <column name="{{prefix}}_{{field1}}"/><column name="{{prefix}}_{{field2}}"/>
     </columnset></columnsetxml>
-    <layoutxml><grid name="resultset" object="neil_{{entity}}" jump="neil_{{primaryfield}}" select="1" preview="0" icon="1">
-      <row name="result" id="neil_{{entity}}id">
-        <cell name="neil_{{field1}}" width="200"/>
-        <cell name="neil_{{field2}}" width="150"/>
+    <layoutxml><grid name="resultset" object="{{prefix}}_{{entity}}" jump="{{prefix}}_{{primaryfield}}" select="1" preview="0" icon="1">
+      <row name="result" id="{{prefix}}_{{entity}}id">
+        <cell name="{{prefix}}_{{field1}}" width="200"/>
+        <cell name="{{prefix}}_{{field2}}" width="150"/>
       </row>
     </grid></layoutxml>
     <fetchxml><fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false">
-      <entity name="neil_{{entity}}">
-        <attribute name="neil_{{field1}}"/>
-        <attribute name="neil_{{field2}}"/>
-        <attribute name="neil_{{entity}}id"/>
-        <order attribute="neil_{{primaryfield}}" descending="false"/>
+      <entity name="{{prefix}}_{{entity}}">
+        <attribute name="{{prefix}}_{{field1}}"/>
+        <attribute name="{{prefix}}_{{field2}}"/>
+        <attribute name="{{prefix}}_{{entity}}id"/>
+        <order attribute="{{prefix}}_{{primaryfield}}" descending="false"/>
         <filter type="and"><condition attribute="statecode" operator="eq" value="0"/></filter>
       </entity>
     </fetch></fetchxml>
@@ -524,7 +544,7 @@ Form, tab, section, and cell GUIDs must all be unique. Use sequential GUIDs (e.g
                 <rows>
                   <row><cell id="{A1000011-0000-4000-8000-000000000001}">
                     <labels><label description="{{Label}}" languagecode="1033" /></labels>
-                    <control id="neil_{{field}}" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="neil_{{field}}" />
+                    <control id="{{prefix}}_{{field}}" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="{{prefix}}_{{field}}" />
                   </cell></row>
                   <!-- repeat <row> for each field; increment last segment: ...0011, ...0012, ... -->
                   <row><cell id="{A1000099-0000-4000-8000-000000000001}">
@@ -561,14 +581,14 @@ Place after `<Languages>` in customizations.xml, before `</ImportExportXml>`.
 ```xml
 <AppModuleSiteMaps>
   <AppModuleSiteMap>
-    <SiteMapUniqueName>neil_{{appname}}</SiteMapUniqueName>
+    <SiteMapUniqueName>{{prefix}}_{{appname}}</SiteMapUniqueName>
     <EnableCollapsibleGroups>False</EnableCollapsibleGroups>
     <ShowHome>True</ShowHome><ShowPinned>True</ShowPinned><ShowRecents>True</ShowRecents>
     <SiteMap IntroducedVersion="7.0.0.0">
-      <Area Id="area_neil_{{entity}}" ResourceId="SitemapDesigner.NewTitle" DescriptionResourceId="SitemapDesigner.NewTitle" ShowGroups="true" IntroducedVersion="7.0.0.0">
+      <Area Id="area_{{prefix}}_{{entity}}" ResourceId="SitemapDesigner.NewTitle" DescriptionResourceId="SitemapDesigner.NewTitle" ShowGroups="true" IntroducedVersion="7.0.0.0">
         <Titles><Title LCID="1033" Title="{{Area Title}}" /></Titles>
-        <Group Id="group_neil_{{entity}}" ResourceId="SitemapDesigner.NewGroup" DescriptionResourceId="SitemapDesigner.NewGroup" IntroducedVersion="7.0.0.0" IsProfile="false" ToolTipResourseId="SitemapDesigner.Unknown">
-          <SubArea Id="subarea_neil_{{entity}}" Icon="/_imgs/imagestrips/transparent_spacer.gif" Entity="neil_{{entity}}" Client="All,Outlook,OutlookLaptopClient,OutlookWorkstationClient,Web" AvailableOffline="true" PassParams="false" Sku="All,OnPremise,Live,SPLA" />
+        <Group Id="group_{{prefix}}_{{entity}}" ResourceId="SitemapDesigner.NewGroup" DescriptionResourceId="SitemapDesigner.NewGroup" IntroducedVersion="7.0.0.0" IsProfile="false" ToolTipResourseId="SitemapDesigner.Unknown">
+          <SubArea Id="subarea_{{prefix}}_{{entity}}" Icon="/_imgs/imagestrips/transparent_spacer.gif" Entity="{{prefix}}_{{entity}}" Client="All,Outlook,OutlookLaptopClient,OutlookWorkstationClient,Web" AvailableOffline="true" PassParams="false" Sku="All,OnPremise,Live,SPLA" />
         </Group>
       </Area>
       <!-- Add more <Area> blocks for additional entity groups -->
@@ -578,7 +598,7 @@ Place after `<Languages>` in customizations.xml, before `</ImportExportXml>`.
 </AppModuleSiteMaps>
 <AppModules>
   <AppModule>
-    <UniqueName>neil_{{appname}}</UniqueName>
+    <UniqueName>{{prefix}}_{{appname}}</UniqueName>
     <IntroducedVersion>1.0.0.0</IntroducedVersion>
     <WebResourceId>953b9fac-1e5e-e611-80d6-00155ded156f</WebResourceId>
     <OptimizedFor></OptimizedFor>
@@ -588,8 +608,8 @@ Place after `<Languages>` in customizations.xml, before `</ImportExportXml>`.
     <NavigationType>0</NavigationType>
     <AppModuleComponents>
       <!-- type="1" for each entity, type="62" for the SiteMap itself -->
-      <AppModuleComponent type="1" schemaName="neil_{{entity}}" />
-      <AppModuleComponent type="62" schemaName="neil_{{appname}}" />
+      <AppModuleComponent type="1" schemaName="{{prefix}}_{{entity}}" />
+      <AppModuleComponent type="62" schemaName="{{prefix}}_{{appname}}" />
     </AppModuleComponents>
     <AppModuleRoleMaps />
     <LocalizedNames><LocalizedName description="{{App Display Name}}" languagecode="1033" /></LocalizedNames>
@@ -627,7 +647,7 @@ Files must sit at the **zip root** — `-j` (junk paths) is required.
 
 ---
 
-## Critical Gotchas (verified from NeilHaddley/Financials + TodoSolution)
+## Critical Gotchas (verified from real import testing)
 
 1. **solution.xml root element** must include `OrganizationVersion`, `OrganizationSchemaType`, `CRMServerServiceabilityVersion`, and `SolutionPackageVersion="9.2"`. Copy the exact attribute set from these projects.
 
@@ -645,7 +665,7 @@ Files must sit at the **zip root** — `-j` (junk paths) is required.
 
 8. **View GUIDs must be fresh** on every import attempt. Failed-import GUIDs are persisted in the environment; re-using them causes the view import to be silently skipped or fail.
 
-9. **`<returnedtypecode>`** = entity logical name string (e.g., `neil_todo`), not a numeric code.
+9. **`<returnedtypecode>`** = entity logical name string (e.g., `{{prefix}}_todo`), not a numeric code.
 
 10. **ImeMode** = string: `auto`, `inactive`, or `disabled`. Not an integer.
 
