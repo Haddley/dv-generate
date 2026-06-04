@@ -527,7 +527,7 @@ Form, tab, section, and cell GUIDs must all be unique. Use sequential GUIDs (e.g
 | Text (nvarchar) | `{4273EDBD-AC1D-40d3-9FB2-095C621B552D}` |
 | Picklist | `{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}` |
 | Decimal / Integer | `{C3EFE0C3-0EC6-42be-8349-CBD9079C717A}` |
-| Boolean | `{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}` |
+| Boolean | *(omit classid — UCI uses its own renderer; specifying this GUID causes read-only rendering)* |
 | DateTime | `{5D68B988-0661-4db2-BC3E-17598AD3BE6C}` |
 | Owner lookup (system) | `{270BD3DB-D9AF-4782-9025-509E298DEC0A}` |
 
