@@ -527,7 +527,7 @@ Form, tab, section, and cell GUIDs must all be unique. Use sequential GUIDs (e.g
 | Text (nvarchar) | `{4273EDBD-AC1D-40d3-9FB2-095C621B552D}` |
 | Picklist | `{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}` |
 | Decimal / Integer | `{C3EFE0C3-0EC6-42be-8349-CBD9079C717A}` |
-| Boolean | *(omit classid — UCI uses its own renderer; specifying this GUID causes read-only rendering)* |
+| Boolean | `{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}` (OptionSet control — classid is required and cannot be null; the legacy boolean GUID `{67FAC785}` imports but renders read-only in UCI) |
 | DateTime | `{5D68B988-0661-4db2-BC3E-17598AD3BE6C}` |
 | Owner lookup (system) | `{270BD3DB-D9AF-4782-9025-509E298DEC0A}` |
 
@@ -679,3 +679,7 @@ Files must sit at the **zip root** — `-j` (junk paths) is required.
 12. **Boolean (Two Options) uses two different type values** — `<Type>bit</Type>` (physical storage, on the attribute) and `<OptionSetType>bool</OptionSetType>` (option set category, inside `<optionset>`). These are NOT interchangeable. Using `bool` for `<Type>` causes "Unable to find attribute type by name bool" on import; using `bit` for `<OptionSetType>` causes the field to render as non-editable in the form.
 
 13. **Boolean fields require `<DefaultValue>`** — without `<DefaultValue>0</DefaultValue>` (or `1`) the field renders as read-only / non-interactive in the model-driven form. Always include it immediately before the `<optionset>` element.
+
+14. **Managed solution upgrades ("ImportAsHolding") always fail during active development** — the upgrade process diffs entity attributes between versions and tries to delete system fields (`statecode`, `statuscode`) that were never in the solution XML. This cannot be fixed via XML. **During development, always delete the existing managed solution before re-importing.** Only upgrades that make purely additive changes (new fields, new views) to a stable entity will succeed without a delete-first.
+
+15. **`<RootComponent behavior="0">` is correct for entity components** — `behavior="1"` registers all subcomponents (including system attributes) as owned by the managed solution, which permanently breaks future upgrades. Use `behavior="0"` as shown in all Microsoft solution exports.
