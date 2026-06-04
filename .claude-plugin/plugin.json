@@ -1,0 +1,9 @@
+{
+  "name": "dv-generate",
+  "version": "1.0.0",
+  "description": "Generate source-controlled Dataverse solution XML files — verified-working patterns from the NeilHaddley/Financials project.",
+  "author": {
+    "name": "Neil Haddley",
+    "email": "neil@haddley.com"
+  }
+}
