@@ -405,6 +405,8 @@ Option values start at `100000000` (publisher option prefix `10000` × 10000).
 
 **Attribute `<Type>` = `bit`. Optionset `<OptionSetType>` = `bool`. These are different — do not swap them.**
 
+**`<DefaultValue>0</DefaultValue>` is required** (placed just before `<optionset>`). Without it the field renders as read-only in the form.
+
 ```xml
 <attribute PhysicalName="{{prefix}}_{{fieldname}}">
   <Type>bit</Type><Name>{{prefix}}_{{fieldname}}</Name><LogicalName>{{prefix}}_{{fieldname}}</LogicalName>
@@ -420,6 +422,7 @@ Option values start at `100000000` (publisher option prefix `10000` × 10000).
   <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings><CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
   <IsDataSourceSecret>0</IsDataSourceSecret><AutoNumberFormat></AutoNumberFormat>
   <IsSearchable>0</IsSearchable><IsFilterable>1</IsFilterable><IsRetrievable>1</IsRetrievable><IsLocalizable>0</IsLocalizable>
+  <DefaultValue>0</DefaultValue>
   <optionset Name="{{prefix}}_{{fieldname}}">
     <OptionSetType>bool</OptionSetType><IsGlobal>0</IsGlobal><IsCustomizable>1</IsCustomizable>
     <displaynames><displayname description="{{Field Label}}" languagecode="1033" /></displaynames>
@@ -674,3 +677,5 @@ Files must sit at the **zip root** — `-j` (junk paths) is required.
 11. **Simple boolean properties** — use `<IsCustomizable>1</IsCustomizable>`, NOT `<IsCustomizable><Value>1</Value><CanModify>1</CanModify></IsCustomizable>`. The compound form triggers "string '11' is not a valid Boolean value" on import.
 
 12. **Boolean attribute type vs optionset type** — the attribute element uses `<Type>bit</Type>`; the nested optionset uses `<OptionSetType>bool</OptionSetType>`. Using `bool` as the attribute type causes "Unable to find attribute type by name bool" on import.
+
+13. **Boolean fields require `<DefaultValue>0</DefaultValue>`** placed immediately before `<optionset>`. Without it the field renders as read-only in the model-driven app form.
