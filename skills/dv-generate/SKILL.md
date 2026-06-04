@@ -680,6 +680,8 @@ Files must sit at the **zip root** — `-j` (junk paths) is required.
 
 13. **Boolean fields require `<DefaultValue>`** — without `<DefaultValue>0</DefaultValue>` (or `1`) the field renders as read-only / non-interactive in the model-driven form. Always include it immediately before the `<optionset>` element.
 
-14. **Managed solution upgrades ("ImportAsHolding") always fail during active development** — the upgrade process diffs entity attributes between versions and tries to delete system fields (`statecode`, `statuscode`) that were never in the solution XML. This cannot be fixed via XML. **During development, always delete the existing managed solution before re-importing.** Only upgrades that make purely additive changes (new fields, new views) to a stable entity will succeed without a delete-first.
+14. **Use `<Managed>0</Managed>` during development** — managed solutions always trigger "ImportAsHolding" (staged upgrade) on re-import, which diffs entity attributes and tries to delete system fields (`statecode`, `statuscode`), causing an unresolvable import failure. Use unmanaged (`<Managed>0</Managed>`) while iterating; re-imports are simple overwrites with no staging. Export as managed from the environment only when the solution is stable and ready to distribute.
 
 15. **`<RootComponent behavior="0">` is correct for entity components** — `behavior="1"` registers all subcomponents (including system attributes) as owned by the managed solution, which permanently breaks future upgrades. Use `behavior="0"` as shown in all Microsoft solution exports.
+
+16. **Holding solutions from failed imports block re-import** — when an ImportAsHolding attempt fails, Dataverse leaves a residual `_Upgrade` holding solution in the environment. Before re-importing, check `make.powerapps.com → Solutions` for any solution with `_Upgrade` or `(patch)` in the name and delete it alongside the main solution.
