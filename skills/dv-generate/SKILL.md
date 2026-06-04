@@ -20,6 +20,12 @@ Then substitute `{{prefix}}_` everywhere in the templates below.
 
 **Never use `new_`** — it is the default Microsoft prefix and causes naming collisions.
 
+## Managed vs unmanaged
+
+**Default to managed (`<Managed>1</Managed>`) unless the user explicitly asks for an unmanaged solution.** Managed solutions are the standard for distribution and production deployment.
+
+If the user asks for an unmanaged solution (e.g., "for development", "unmanaged", "I want to edit it after import"), use `<Managed>0</Managed>`. Unmanaged solutions can be re-imported as simple overwrites without the staged upgrade process, which avoids the `ImportAsHolding` / statecode deletion errors that occur when iterating during development.
+
 The publisher block in `solution.xml` also needs:
 - `<UniqueName>` — a PascalCase identifier for the publisher (e.g., `ContosoInc`)
 - `<CustomizationPrefix>` — the lowercase prefix (e.g., `contoso`)
@@ -81,7 +87,7 @@ The root `<ImportExportXml>` element **must** include all version attributes sho
     </LocalizedNames>
     <Descriptions/>
     <Version>1.0.0.0</Version>
-    <Managed>0</Managed>
+    <Managed>1</Managed>  <!-- use 0 only if user explicitly requests unmanaged -->
     <Publisher>
       <UniqueName>{{PublisherUniqueName}}</UniqueName>
       <LocalizedNames>
@@ -695,7 +701,7 @@ Files must sit at the **zip root** — `-j` (junk paths) is required.
     - Options use `<option value="1">` / `<option value="0">` — NOT `<TrueOption>` / `<FalseOption>`
     - Form control classid `{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}` is correct — but **`disabled="false"` is required** on the control or it renders read-only
 
-14. **Use `<Managed>0</Managed>` during development** — managed solutions always trigger "ImportAsHolding" (staged upgrade) on re-import, which diffs entity attributes and tries to delete system fields (`statecode`, `statuscode`), causing an unresolvable import failure. Use unmanaged (`<Managed>0</Managed>`) while iterating; re-imports are simple overwrites with no staging. Export as managed from the environment only when the solution is stable and ready to distribute.
+14. **Managed solution upgrades require delete-first during active development** — managed solutions trigger "ImportAsHolding" (staged upgrade) on re-import, which diffs entity attributes and tries to delete system fields (`statecode`, `statuscode`), causing an unresolvable import failure. When iterating on a managed solution, delete the existing solution before re-importing. If the user hits repeated upgrade failures they can switch to `<Managed>0</Managed>` temporarily; re-imports of unmanaged solutions are simple overwrites with no staging.
 
 15. **`<RootComponent behavior="0">` is correct for entity components** — `behavior="1"` registers all subcomponents (including system attributes) as owned by the managed solution, which permanently breaks future upgrades. Use `behavior="0"` as shown in all Microsoft solution exports.
 
