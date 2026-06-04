@@ -55,5 +55,18 @@ else
   echo "Already registered in $PLUGINS_JSON"
 fi
 
+# Symlink into ~/.claude/skills/ so Claude Code discovers it
+SKILLS_DIR="$HOME/.claude/skills"
+SKILL_LINK="$SKILLS_DIR/dv-generate"
+mkdir -p "$SKILLS_DIR"
+if [ -L "$SKILL_LINK" ]; then
+  echo "Skill symlink already exists at $SKILL_LINK"
+elif [ -e "$SKILL_LINK" ]; then
+  echo "Warning: $SKILL_LINK exists but is not a symlink — skipping"
+else
+  ln -s "$INSTALL_DIR/skills/dv-generate" "$SKILL_LINK"
+  echo "Linked skill to $SKILL_LINK"
+fi
+
 echo ""
 echo "Done. Restart Claude Code to activate the dv-generate skill."
