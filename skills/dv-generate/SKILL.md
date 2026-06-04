@@ -403,9 +403,11 @@ Option values start at `100000000` (publisher option prefix `10000` × 10000).
 
 ### Boolean (Two Options)
 
+**Attribute `<Type>` = `bit`. Optionset `<OptionSetType>` = `bool`. These are different — do not swap them.**
+
 ```xml
 <attribute PhysicalName="{{prefix}}_{{fieldname}}">
-  <Type>bool</Type><Name>{{prefix}}_{{fieldname}}</Name><LogicalName>{{prefix}}_{{fieldname}}</LogicalName>
+  <Type>bit</Type><Name>{{prefix}}_{{fieldname}}</Name><LogicalName>{{prefix}}_{{fieldname}}</LogicalName>
   <RequiredLevel>none</RequiredLevel>
   <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
   <ImeMode>auto</ImeMode>
@@ -670,3 +672,5 @@ Files must sit at the **zip root** — `-j` (junk paths) is required.
 10. **ImeMode** = string: `auto`, `inactive`, or `disabled`. Not an integer.
 
 11. **Simple boolean properties** — use `<IsCustomizable>1</IsCustomizable>`, NOT `<IsCustomizable><Value>1</Value><CanModify>1</CanModify></IsCustomizable>`. The compound form triggers "string '11' is not a valid Boolean value" on import.
+
+12. **Boolean attribute type vs optionset type** — the attribute element uses `<Type>bit</Type>`; the nested optionset uses `<OptionSetType>bool</OptionSetType>`. Using `bool` as the attribute type causes "Unable to find attribute type by name bool" on import.
