@@ -403,12 +403,16 @@ Option values start at `100000000` (publisher option prefix `10000` × 10000).
 
 ### Boolean (Two Options)
 
-**Attribute `<Type>` = `bit`. Optionset `<OptionSetType>` = `bool`. These are different — do not swap them.**
+Verified from a working Dataverse export. Three things differ from other attribute types:
 
-**`<DefaultValue>0</DefaultValue>` is required** (placed just before `<optionset>`). Without it the field renders as read-only in the form.
+1. `<AppDefaultValue>0</AppDefaultValue>` — NOT `<DefaultValue>` (wrong element, causes read-only rendering)
+2. Optionset name is **entity-qualified**: `{{prefix}}_{{entity}}_{{fieldname}}` — not just `{{prefix}}_{{fieldname}}`
+3. `<OptionSetType>bit</OptionSetType>` — NOT `bool`
+4. Options use `<option value="1">` / `<option value="0">` — NOT `<TrueOption>` / `<FalseOption>`
+5. Form control classid `{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}` is correct — but **must include `disabled="false"`** or the control renders read-only
 
 ```xml
-<attribute PhysicalName="{{prefix}}_{{fieldname}}">
+<attribute PhysicalName="{{prefix}}_{{FieldnameCapitalised}}">
   <Type>bit</Type><Name>{{prefix}}_{{fieldname}}</Name><LogicalName>{{prefix}}_{{fieldname}}</LogicalName>
   <RequiredLevel>none</RequiredLevel>
   <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
@@ -421,18 +425,25 @@ Option values start at `100000000` (publisher option prefix `10000` × 10000).
   <IsGlobalFilterEnabled>0</IsGlobalFilterEnabled><IsSortableEnabled>0</IsSortableEnabled>
   <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings><CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
   <IsDataSourceSecret>0</IsDataSourceSecret><AutoNumberFormat></AutoNumberFormat>
-  <IsSearchable>0</IsSearchable><IsFilterable>1</IsFilterable><IsRetrievable>1</IsRetrievable><IsLocalizable>0</IsLocalizable>
-  <DefaultValue>0</DefaultValue>
-  <optionset Name="{{prefix}}_{{fieldname}}">
-    <OptionSetType>bool</OptionSetType><IsGlobal>0</IsGlobal><IsCustomizable>1</IsCustomizable>
+  <IsSearchable>0</IsSearchable><IsFilterable>0</IsFilterable><IsRetrievable>0</IsRetrievable><IsLocalizable>0</IsLocalizable>
+  <AppDefaultValue>0</AppDefaultValue>
+  <optionset Name="{{prefix}}_{{entity}}_{{fieldname}}">
+    <OptionSetType>bit</OptionSetType><IsGlobal>0</IsGlobal><IsCustomizable>1</IsCustomizable>
     <displaynames><displayname description="{{Field Label}}" languagecode="1033" /></displaynames>
     <Descriptions><Description description="" languagecode="1033" /></Descriptions>
-    <TrueOption><labels><label description="Yes" languagecode="1033" /></labels><Descriptions><Description description="" languagecode="1033" /></Descriptions></TrueOption>
-    <FalseOption><labels><label description="No" languagecode="1033" /></labels><Descriptions><Description description="" languagecode="1033" /></Descriptions></FalseOption>
+    <options>
+      <option value="1" ExternalValue="" IsHidden="0"><labels><label description="Yes" languagecode="1033" /></labels></option>
+      <option value="0" ExternalValue="" IsHidden="0"><labels><label description="No" languagecode="1033" /></labels></option>
+    </options>
   </optionset>
   <displaynames><displayname description="{{Field Label}}" languagecode="1033" /></displaynames>
   <Descriptions><Description description="" languagecode="1033" /></Descriptions>
 </attribute>
+```
+
+Form control:
+```xml
+<control id="{{prefix}}_{{fieldname}}" classid="{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}" datafieldname="{{prefix}}_{{fieldname}}" disabled="false" />
 ```
 
 ---
@@ -527,7 +538,7 @@ Form, tab, section, and cell GUIDs must all be unique. Use sequential GUIDs (e.g
 | Text (nvarchar) | `{4273EDBD-AC1D-40d3-9FB2-095C621B552D}` |
 | Picklist | `{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}` |
 | Decimal / Integer | `{C3EFE0C3-0EC6-42be-8349-CBD9079C717A}` |
-| Boolean | `{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}` (OptionSet control — classid is required and cannot be null; the legacy boolean GUID `{67FAC785}` imports but renders read-only in UCI) |
+| Boolean | `{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}` — **must also set `disabled="false"`** on the control element or it renders read-only |
 | DateTime | `{5D68B988-0661-4db2-BC3E-17598AD3BE6C}` |
 | Owner lookup (system) | `{270BD3DB-D9AF-4782-9025-509E298DEC0A}` |
 
@@ -676,9 +687,13 @@ Files must sit at the **zip root** — `-j` (junk paths) is required.
 
 11. **Simple boolean properties** — use `<IsCustomizable>1</IsCustomizable>`, NOT `<IsCustomizable><Value>1</Value><CanModify>1</CanModify></IsCustomizable>`. The compound form triggers "string '11' is not a valid Boolean value" on import.
 
-12. **Boolean (Two Options) uses two different type values** — `<Type>bit</Type>` (physical storage, on the attribute) and `<OptionSetType>bool</OptionSetType>` (option set category, inside `<optionset>`). These are NOT interchangeable. Using `bool` for `<Type>` causes "Unable to find attribute type by name bool" on import; using `bit` for `<OptionSetType>` causes the field to render as non-editable in the form.
-
-13. **Boolean fields require `<DefaultValue>`** — without `<DefaultValue>0</DefaultValue>` (or `1`) the field renders as read-only / non-interactive in the model-driven form. Always include it immediately before the `<optionset>` element.
+12. **Boolean (Two Options) — verified correct structure** (reverse-engineered from working export):
+    - `<Type>bit</Type>` on the attribute
+    - `<AppDefaultValue>0</AppDefaultValue>` — NOT `<DefaultValue>` (wrong element name, causes read-only)
+    - Optionset name must be entity-qualified: `{{prefix}}_{{entity}}_{{fieldname}}`
+    - `<OptionSetType>bit</OptionSetType>` inside the optionset — NOT `bool`
+    - Options use `<option value="1">` / `<option value="0">` — NOT `<TrueOption>` / `<FalseOption>`
+    - Form control classid `{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}` is correct — but **`disabled="false"` is required** on the control or it renders read-only
 
 14. **Use `<Managed>0</Managed>` during development** — managed solutions always trigger "ImportAsHolding" (staged upgrade) on re-import, which diffs entity attributes and tries to delete system fields (`statecode`, `statuscode`), causing an unresolvable import failure. Use unmanaged (`<Managed>0</Managed>`) while iterating; re-imports are simple overwrites with no staging. Export as managed from the environment only when the solution is stable and ready to distribute.
 
