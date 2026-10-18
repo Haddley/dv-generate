@@ -1,6 +1,6 @@
 ---
 name: dv-generate
-description: Generate source-controlled Dataverse solution XML files (customizations.xml, solution.xml, pack.sh) without a live environment. Use when the user wants to create a new solution from scratch, add tables/fields/views/forms, or scaffold a model-driven app with AppModule and SiteMap. Always ask for the publisher prefix before generating any XML.
+description: Generate source-controlled, unmanaged Dataverse solution XML files (customizations.xml, solution.xml, pack.sh) without a live environment. Use when the user wants to create a new solution from scratch, add tables/fields/views/forms, or scaffold a model-driven app with AppModule and SiteMap. Also reports the manual steps needed in dev when a change cannot be made by regenerating, and pulls manual dev changes back into the saved XML. Always ask for the publisher prefix before generating any XML.
 ---
 
 # Skill: Dataverse Solution Generation (Source-Controlled XML)
@@ -20,16 +20,66 @@ Then substitute `{{prefix}}_` everywhere in the templates below.
 
 **Never use `new_`** — it is the default Microsoft prefix and causes naming collisions.
 
-## Managed vs unmanaged
+## Solutions are always unmanaged
 
-**Default to managed (`<Managed>1</Managed>`) unless the user explicitly asks for an unmanaged solution.** Managed solutions are the standard for distribution and production deployment.
+**dv-generate only produces unmanaged solutions (`<Managed>0</Managed>`). There is no managed option.** If the user asks for a managed solution, explain the deployment flow below instead of setting `<Managed>1</Managed>`.
 
-If the user asks for an unmanaged solution (e.g., "for development", "unmanaged", "I want to edit it after import"), use `<Managed>0</Managed>`. Unmanaged solutions can be re-imported as simple overwrites without the staged upgrade process, which avoids the `ImportAsHolding` / statecode deletion errors that occur when iterating during development.
+Unmanaged solutions can be re-imported as simple overwrites, so iterating in a development environment does not trigger the staged upgrade (`ImportAsHolding`) and statecode deletion errors that hand-written managed solutions hit. Microsoft's guidance on hand-editing the customizations file also covers unmanaged exports only.
 
-The publisher block in `solution.xml` also needs:
+### Deploying: export as managed from dev
+
+When you want to deploy beyond development:
+
+1. Import the generated unmanaged solution into a **dev** environment (`pac solution import --path MySolution.zip`, or make.powerapps.com → Solutions → Import solution).
+2. From dev, **export it as managed** (make.powerapps.com → Solutions → Export → Managed, or `pac solution export --name {{SolutionUniqueName}} --path out --managed`).
+3. Deploy the exported managed zip to test, UAT and production.
+
+The platform writes the managed package itself, so layering, upgrade and delete behaviour are correct. Do not edit `<Managed>` by hand to produce one.
+
+### Publisher block
+
+The publisher block in `solution.xml` needs:
 - `<UniqueName>` — a PascalCase identifier for the publisher (e.g., `ContosoInc`)
 - `<CustomizationPrefix>` — the lowercase prefix (e.g., `contoso`)
 - `<CustomizationOptionValuePrefix>` — a unique integer (e.g., `10000`); must not clash with other publishers in the same environment
+
+---
+
+## Changing a solution after its first release
+
+Results below come from the 16-scenario regeneration matrix in `tests/regen/` (unmanaged dev environment plus a separate managed target). Anything not listed was not tested.
+
+### What regenerating does reliably
+
+Edit the saved XML in place, bump `<Version>`, import into dev (an overwrite), test, then export as managed and import into the sandbox as an **upgrade** (`pac solution import --path X.zip --stage-and-upgrade`). This worked on every path for:
+
+- adding a column, a picklist option, a table, an environment variable or a connection reference
+- changing a column label or an environment variable default
+
+### What regenerating cannot do: tell the user
+
+Leaving something out of the XML does **not** remove it from the dev environment. When a change below is requested, say so and give the user the manual step. `scripts/drift.py <saved-dir> <dev-export-dir> --manual` prints the exact list.
+
+| Change | What happens | What to tell the user |
+|---|---|---|
+| Remove a column, view, form or picklist option | Stays in dev and in the managed export, because `RootComponent behavior="0"` includes everything that exists on the table | Delete it in dev (make.powerapps.com > Tables) before exporting managed. Tested for a column and a view: after the dev delete, the version bump and the managed export, the upgrade removed both from the target. An upgrade is expected to delete the column's data (not tested; removing a whole table was tested and it deleted the rows). |
+| Change a column's type | Dataverse rejects the import ("Attribute … is a Decimal, but a Integer type was specified") | Add a new column, move the data, delete the old column |
+| Remove a table, environment variable, connection reference or app | Stays in the dev environment even if you leave it out of the zip | Delete the **unmanaged** solution wrapper (`pac solution delete --solution-name X`; never do this to a managed solution, which uninstalls it) and re-import, so the solution matches the zip. Delete the table in dev as well if it should not survive there. An upgrade then removes it in the target, and removing a table deletes all its rows. |
+| Remove a table while an app stays | The managed upgrade fails ("component cannot be deleted because it is referenced by 1 other components") | Remove the app in the same release; add it back (without the table) in the next release |
+| Deploy removals with a plain update | Nothing is removed in the target | Use `--stage-and-upgrade` |
+
+Importing a release that removes a picklist option hung (15 min) on 2 of 4 attempts in testing; the option was not removed in dev either.
+
+### Rules when regenerating
+
+1. **Pull first** (below), so manual edits made in dev are not overwritten. An overwrite import replaces any view or form that shares a GUID with the saved XML.
+2. Edit the saved files in place. Never change a schema name or an existing GUID. Derive GUIDs from stable names (for example `uuid5` of the prefix, table and component name) so regenerating the same spec gives the same GUIDs.
+3. After regenerating, run `drift.py --manual`, relay every step and warning to the user, and wait for them to confirm the dev changes. Then run `scripts/pull.py` again to confirm it reports no drift, bump the version in dev (`pac solution online-version --solution-name X --solution-version 1.0.0.N --environment <dev>`) and export managed.
+4. Import the same managed zip into the sandbox, then production.
+
+### Pulling manual changes back from dev
+
+`scripts/pull.py --env <dev-url> --solution <UniqueName> --dir <SolutionDir>` exports the **unmanaged** solution from dev and reports what differs from the saved XML: tables, custom columns and their types, labels and options, views, forms (fields), environment variables, connection references and app tables. Platform system columns and system views are ignored. It changes nothing unless you add `--apply`, which replaces the saved XML with dev's export ("adopt dev as the source of truth"); review with `git diff`. It cannot read a managed solution. Use the report to fold the dev changes into the saved XML in the templates' style, or adopt the export wholesale.
 
 ---
 
@@ -37,6 +87,7 @@ The publisher block in `solution.xml` also needs:
 
 | Need | Use instead |
 |---|---|
+| Produce a managed package | Import the unmanaged zip into dev, then export as managed (see "Deploying: export as managed from dev") |
 | Export/import/pack/unpack via PAC CLI | **dv-solution** |
 | Query or read Dataverse records | **dv-query** |
 | Create/update records via API | **dv-data** |
@@ -46,19 +97,22 @@ The publisher block in `solution.xml` also needs:
 
 ## File Structure
 
-Every importable solution zip contains exactly **three files at the zip root** (no subdirectory):
+Every importable solution zip contains **three files at the zip root**, plus an `environmentvariabledefinitions/` folder if the solution has environment variables:
 
 ```
 [Content_Types].xml
 solution.xml
 customizations.xml
+environmentvariabledefinitions/        (only if environment variables are used)
+  {{prefix}}_{{VariableName}}/environmentvariabledefinition.xml
 ```
 
 Pack with:
 ```bash
 cd MySolutionDir
-zip -j ../MySolution.zip "[Content_Types].xml" solution.xml customizations.xml
+zip -r ../MySolution.zip "[Content_Types].xml" solution.xml customizations.xml environmentvariabledefinitions
 ```
+(Omit `environmentvariabledefinitions` if the folder does not exist.)
 
 ### [Content_Types].xml (static — always identical)
 
@@ -87,7 +141,7 @@ The root `<ImportExportXml>` element **must** include all version attributes sho
     </LocalizedNames>
     <Descriptions/>
     <Version>1.0.0.0</Version>
-    <Managed>1</Managed>  <!-- use 0 only if user explicitly requests unmanaged -->
+    <Managed>0</Managed>
     <Publisher>
       <UniqueName>{{PublisherUniqueName}}</UniqueName>
       <LocalizedNames>
@@ -456,78 +510,76 @@ Form control:
 
 ## View Templates
 
-Every entity needs at minimum: a default list view (`querytype 0`) and a Quick Find view (`querytype 4`).
+Every entity needs at minimum: a list view (`querytype 0`) and a Quick Find view (`querytype 4`). Dataverse also creates its own system views (Active, Inactive, Advanced Find, Associated, Lookup), so custom views appear alongside them.
 
-**`returnedtypecode`** = entity logical name string (`{{prefix}}_todo`), **not a number**.
+**Structure (verified by import and re-export):**
+- `<savedquery>` elements must be wrapped in a `<savedqueries>` element inside `<SavedQueries>`. **Without the wrapper the import still reports success but silently drops every view**, and `pac solution unpack` fails with `Value cannot be null. (Parameter 'other')`.
+- Do **not** include `<columnsetxml>`. Importing it fails with "The FetchXml (<columnset>…) is invalid".
+- The view's columns come from `<layoutxml>` and `<fetchxml>`. `<returnedtypecode>` is not needed (real exports omit it); if you do include it, use the entity logical name string, not a number.
+- A Quick Find view needs `<filter type="or" isquickfindfields="1">` with a `like` condition on each searchable column, using the value `{0}`.
 
-**GUIDs must be fresh per import attempt.** Failed-import GUIDs persist in the environment and cause re-import to fail. Generate:
+**GUIDs must be stable.** Generate each `savedqueryid` once, commit it, and never regenerate it. Re-importing with the same GUID updates the view in place; a new GUID creates a duplicate view. Generate with:
 ```bash
-python3 -c "import uuid; print(str(uuid.uuid4()).upper())"
+python3 -c "import uuid; print('{' + str(uuid.uuid4()).upper() + '}')"
 ```
-
-For readability, use sequential-looking hex GUIDs like `{B1000001-0000-4000-8000-000000000001}` — group entities by first digit (`B1` = entity 1, `B2` = entity 2, etc.).
 
 ```xml
 <SavedQueries>
-  <!-- Default list view -->
-  <savedquery>
-    <savedqueryid>{UNIQUE-GUID-1}</savedqueryid>
-    <querytype>0</querytype>
-    <name>All {{Plural Name}}</name>
-    <returnedtypecode>{{prefix}}_{{entity}}</returnedtypecode>
-    <isdefault>1</isdefault><iscustom>1</iscustom><isquickfindquery>0</isquickfindquery>
-    <IsCustomizable>1</IsCustomizable><CanBeDeleted>1</CanBeDeleted>
-    <columnsetxml><columnset>
-      <column name="{{prefix}}_{{field1}}"/><column name="{{prefix}}_{{field2}}"/>
-    </columnset></columnsetxml>
-    <layoutxml><grid name="resultset" object="{{prefix}}_{{entity}}" jump="{{prefix}}_{{primaryfield}}" select="1" preview="0" icon="1">
-      <row name="result" id="{{prefix}}_{{entity}}id">
-        <cell name="{{prefix}}_{{field1}}" width="200"/>
-        <cell name="{{prefix}}_{{field2}}" width="150"/>
-      </row>
-    </grid></layoutxml>
-    <fetchxml><fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false">
-      <entity name="{{prefix}}_{{entity}}">
-        <attribute name="{{prefix}}_{{field1}}"/>
-        <attribute name="{{prefix}}_{{field2}}"/>
-        <attribute name="{{prefix}}_{{entity}}id"/>
-        <order attribute="{{prefix}}_{{primaryfield}}" descending="false"/>
-        <filter type="and"><condition attribute="statecode" operator="eq" value="0"/></filter>
-      </entity>
-    </fetch></fetchxml>
-    <LocalizedNames><LocalizedName description="All {{Plural Name}}" languagecode="1033"/></LocalizedNames>
-    <Descriptions><Description description="" languagecode="1033"/></Descriptions>
-  </savedquery>
+  <savedqueries>
+    <!-- List view -->
+    <savedquery>
+      <IsCustomizable>1</IsCustomizable><CanBeDeleted>1</CanBeDeleted>
+      <isquickfindquery>0</isquickfindquery><isprivate>0</isprivate><isdefault>1</isdefault>
+      <savedqueryid>{UNIQUE-GUID-1}</savedqueryid>
+      <layoutxml><grid name="resultset" jump="{{prefix}}_{{primaryfield}}" select="1" icon="1" preview="1">
+        <row name="result" id="{{prefix}}_{{entity}}id">
+          <cell name="{{prefix}}_{{field1}}" width="200"/>
+          <cell name="{{prefix}}_{{field2}}" width="150"/>
+        </row>
+      </grid></layoutxml>
+      <querytype>0</querytype>
+      <fetchxml><fetch version="1.0" mapping="logical">
+        <entity name="{{prefix}}_{{entity}}">
+          <attribute name="{{prefix}}_{{entity}}id"/>
+          <attribute name="{{prefix}}_{{field1}}"/>
+          <attribute name="{{prefix}}_{{field2}}"/>
+          <order attribute="{{prefix}}_{{primaryfield}}" descending="false"/>
+          <filter type="and"><condition attribute="statecode" operator="eq" value="0"/></filter>
+        </entity>
+      </fetch></fetchxml>
+      <IntroducedVersion>1.0.0.0</IntroducedVersion>
+      <LocalizedNames><LocalizedName description="All {{Plural Name}}" languagecode="1033"/></LocalizedNames>
+    </savedquery>
 
-  <!-- Quick Find view -->
-  <savedquery>
-    <savedqueryid>{UNIQUE-GUID-2}</savedqueryid>
-    <querytype>4</querytype>
-    <name>Quick Find {{Plural Name}}</name>
-    <returnedtypecode>{{prefix}}_{{entity}}</returnedtypecode>
-    <isdefault>1</isdefault><iscustom>1</iscustom><isquickfindquery>1</isquickfindquery>
-    <IsCustomizable>1</IsCustomizable><CanBeDeleted>1</CanBeDeleted>
-    <columnsetxml><columnset>
-      <column name="{{prefix}}_{{field1}}"/><column name="{{prefix}}_{{field2}}"/>
-    </columnset></columnsetxml>
-    <layoutxml><grid name="resultset" object="{{prefix}}_{{entity}}" jump="{{prefix}}_{{primaryfield}}" select="1" preview="0" icon="1">
-      <row name="result" id="{{prefix}}_{{entity}}id">
-        <cell name="{{prefix}}_{{field1}}" width="200"/>
-        <cell name="{{prefix}}_{{field2}}" width="150"/>
-      </row>
-    </grid></layoutxml>
-    <fetchxml><fetch version="1.0" output-format="xml-platform" mapping="logical" distinct="false">
-      <entity name="{{prefix}}_{{entity}}">
-        <attribute name="{{prefix}}_{{field1}}"/>
-        <attribute name="{{prefix}}_{{field2}}"/>
-        <attribute name="{{prefix}}_{{entity}}id"/>
-        <order attribute="{{prefix}}_{{primaryfield}}" descending="false"/>
-        <filter type="and"><condition attribute="statecode" operator="eq" value="0"/></filter>
-      </entity>
-    </fetch></fetchxml>
-    <LocalizedNames><LocalizedName description="Quick Find {{Plural Name}}" languagecode="1033"/></LocalizedNames>
-    <Descriptions><Description description="" languagecode="1033"/></Descriptions>
-  </savedquery>
+    <!-- Quick Find view -->
+    <savedquery>
+      <IsCustomizable>1</IsCustomizable><CanBeDeleted>1</CanBeDeleted>
+      <isquickfindquery>1</isquickfindquery><isprivate>0</isprivate><isdefault>1</isdefault>
+      <savedqueryid>{UNIQUE-GUID-2}</savedqueryid>
+      <layoutxml><grid name="resultset" jump="{{prefix}}_{{primaryfield}}" select="1" icon="1" preview="1">
+        <row name="result" id="{{prefix}}_{{entity}}id">
+          <cell name="{{prefix}}_{{field1}}" width="200"/>
+          <cell name="{{prefix}}_{{field2}}" width="150"/>
+        </row>
+      </grid></layoutxml>
+      <querytype>4</querytype>
+      <fetchxml><fetch version="1.0" mapping="logical">
+        <entity name="{{prefix}}_{{entity}}">
+          <attribute name="{{prefix}}_{{entity}}id"/>
+          <attribute name="{{prefix}}_{{field1}}"/>
+          <attribute name="{{prefix}}_{{field2}}"/>
+          <order attribute="{{prefix}}_{{primaryfield}}" descending="false"/>
+          <filter type="and"><condition attribute="statecode" operator="eq" value="0"/></filter>
+          <filter type="or" isquickfindfields="1">
+            <condition attribute="{{prefix}}_{{field1}}" operator="like" value="{0}"/>
+            <condition attribute="{{prefix}}_{{field2}}" operator="like" value="{0}"/>
+          </filter>
+        </entity>
+      </fetch></fetchxml>
+      <IntroducedVersion>1.0.0.0</IntroducedVersion>
+      <LocalizedNames><LocalizedName description="Quick Find {{Plural Name}}" languagecode="1033"/></LocalizedNames>
+    </savedquery>
+  </savedqueries>
 </SavedQueries>
 ```
 
@@ -648,6 +700,63 @@ Place after `<Languages>` in customizations.xml, before `</ImportExportXml>`.
 
 ---
 
+## Environment Variables
+
+Verified from a real Dataverse export. Environment variable definitions are **not** in customizations.xml. Each one is its own file at `environmentvariabledefinitions/{{prefix}}_{{VariableName}}/environmentvariabledefinition.xml` (folder name = schema name).
+
+```xml
+<environmentvariabledefinition schemaname="{{prefix}}_{{VariableName}}">
+  <defaultvalue>{{default}}</defaultvalue>   <!-- omit for Secret -->
+  <description default="{{Description}}">
+    <label description="{{Description}}" languagecode="1033" />
+  </description>
+  <displayname default="{{Display Name}}">
+    <label description="{{Display Name}}" languagecode="1033" />
+  </displayname>
+  <introducedversion>1.0.0.0</introducedversion>
+  <iscustomizable>1</iscustomizable>
+  <isrequired>0</isrequired>
+  <secretstore>0</secretstore>
+  <type>{{TypeCode}}</type>
+</environmentvariabledefinition>
+```
+
+| Type | `<type>` | Example `<defaultvalue>` |
+|---|---|---|
+| Text | `100000000` | `Text` |
+| Decimal number | `100000001` | `12` |
+| Boolean (Yes/No) | `100000002` | `yes` (string, not `1`/`true`) |
+| JSON | `100000003` | `{ "name":"John" }` |
+| Secret | `100000005` | none — omit `<defaultvalue>` |
+
+Data source is probably `100000004`, but that has not been verified from an export. Per-environment values (`environmentvariablevalue`) are not generated; supply them at import time with a deployment settings file (`pac solution create-settings`, then `pac solution import --settings-file`).
+
+---
+
+## Connection References
+
+Verified from a real Dataverse export. Connection references go in customizations.xml between `<EntityDataProviders />` and `<Languages>`. A reference is only a pointer to a connector; the connection itself is supplied at import time (maker prompt or deployment settings file). dv-generate cannot create the flows or canvas apps that use a reference.
+
+```xml
+<connectionreferences>
+  <connectionreference connectionreferencelogicalname="{{prefix}}_{{ReferenceName}}">
+    <connectionreferencedisplayname>{{Display Name}}</connectionreferencedisplayname>
+    <connectorid>/providers/Microsoft.PowerApps/apis/{{connector_api_name}}</connectorid>
+    <description>{{Description}}</description>
+    <iscustomizable>1</iscustomizable>
+    <promptingbehavior>0</promptingbehavior>
+    <statecode>0</statecode>
+    <statuscode>1</statuscode>
+  </connectionreference>
+</connectionreferences>
+```
+
+Example `connectorid`: `/providers/Microsoft.PowerApps/apis/shared_azureblob`. Other shared connectors follow the same `shared_{{name}}` pattern.
+
+**RootComponents:** do not add RootComponent entries for environment variables or connection references. The reference export left `<RootComponents />` empty even though it contained both. An import test (unmanaged, platform `9.2.26092.158`) confirmed that a solution without those entries imports cleanly and re-exports with the environment variables and connection reference intact, and that adding them (`type="380"`, `type="10066"`) made no difference to the export.
+
+---
+
 ## pack.sh
 
 ```bash
@@ -658,14 +767,17 @@ SOLUTION_DIR="$SCRIPT_DIR/{{SolutionName}}"
 OUTPUT="$SCRIPT_DIR/{{SolutionName}}.zip"
 echo "Packing from: $SOLUTION_DIR"
 cd "$SOLUTION_DIR"
-zip -j "$OUTPUT" "[Content_Types].xml" solution.xml customizations.xml
+rm -f "$OUTPUT"
+FILES=("[Content_Types].xml" solution.xml customizations.xml)
+[ -d environmentvariabledefinitions ] && FILES+=(environmentvariabledefinitions)
+zip -r "$OUTPUT" "${FILES[@]}"
 echo "Created: $OUTPUT"
 echo ""
 echo "Import:  pac solution import --path $OUTPUT"
 echo "Browser: make.powerapps.com → Solutions → Import Solution"
 ```
 
-Files must sit at the **zip root** — `-j` (junk paths) is required.
+`[Content_Types].xml`, solution.xml and customizations.xml must sit at the **zip root**. Do not use `zip -j`, which would flatten the `environmentvariabledefinitions/` folder.
 
 ---
 
@@ -685,9 +797,9 @@ Files must sit at the **zip root** — `-j` (junk paths) is required.
 
 7. **Multiline text** = `<Type>nvarchar</Type>` + `<Format>textarea</Format>`. `<Type>memo</Type>` is not recognised and causes import failure.
 
-8. **View GUIDs must be fresh** on every import attempt. Failed-import GUIDs are persisted in the environment; re-using them causes the view import to be silently skipped or fail.
+8. **View GUIDs must be stable, and views need the `<savedqueries>` wrapper.** A new GUID on re-import creates a duplicate view; the same GUID updates it. Earlier advice to regenerate GUIDs per attempt was wrong — views were being silently dropped because the `<savedqueries>` wrapper was missing (see View Templates).
 
-9. **`<returnedtypecode>`** = entity logical name string (e.g., `{{prefix}}_todo`), not a numeric code.
+9. **`<returnedtypecode>`** is optional on views. If present it is the entity logical name string (e.g., `{{prefix}}_todo`), not a numeric code.
 
 10. **ImeMode** = string: `auto`, `inactive`, or `disabled`. Not an integer.
 
@@ -701,8 +813,8 @@ Files must sit at the **zip root** — `-j` (junk paths) is required.
     - Options use `<option value="1">` / `<option value="0">` — NOT `<TrueOption>` / `<FalseOption>`
     - Form control classid `{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}` is correct — but **`disabled="false"` is required** on the control or it renders read-only
 
-14. **Managed solution upgrades require delete-first during active development** — managed solutions trigger "ImportAsHolding" (staged upgrade) on re-import, which diffs entity attributes and tries to delete system fields (`statecode`, `statuscode`), causing an unresolvable import failure. When iterating on a managed solution, delete the existing solution before re-importing. If the user hits repeated upgrade failures they can switch to `<Managed>0</Managed>` temporarily; re-imports of unmanaged solutions are simple overwrites with no staging.
+13. **Generate unmanaged only; re-import as an overwrite** — hand-written managed solutions trigger "ImportAsHolding" (staged upgrade) on re-import, which diffs entity attributes and tries to delete system fields (`statecode`, `statuscode`), causing an unresolvable import failure. Unmanaged re-imports are simple overwrites. To get a managed package, import to dev and export as managed (see "Deploying: export as managed from dev").
 
-15. **`<RootComponent behavior="0">` is correct for entity components** — `behavior="1"` registers all subcomponents (including system attributes) as owned by the managed solution, which permanently breaks future upgrades. Use `behavior="0"` as shown in all Microsoft solution exports.
+14. **`<RootComponent behavior="0">` is correct for entity components** — Microsoft defines the values as `0` = Include Subcomponents, `1` = Do not include subcomponents, `2` = Include As Shell Only. Use `behavior="0"` as shown in all Microsoft solution exports. Because `0` includes every subcomponent that exists on the table in the environment, deleting a column or view from the generated XML does **not** remove it from the solution or from a managed export; it must be deleted in the dev environment too.
 
-16. **Holding solutions from failed imports block re-import** — when an ImportAsHolding attempt fails, Dataverse leaves a residual `_Upgrade` holding solution in the environment. Before re-importing, check `make.powerapps.com → Solutions` for any solution with `_Upgrade` or `(patch)` in the name and delete it alongside the main solution.
+15. **Holding solutions from failed managed imports block re-import** — if an earlier managed upgrade attempt left a residual `_Upgrade` holding solution in the environment, check `make.powerapps.com → Solutions` for any solution with `_Upgrade` or `(patch)` in the name and delete it alongside the main solution before re-importing.
