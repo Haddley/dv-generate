@@ -1,6 +1,6 @@
 ---
 name: dv-generate
-description: Generate source-controlled, unmanaged Dataverse solution XML files (customizations.xml, solution.xml, pack.sh) without a live environment. Use when the user wants to create a new solution from scratch, add tables/fields/views/forms, or scaffold a model-driven app with AppModule and SiteMap. Adds and changes components by regenerating, does not remove them, and pulls manual dev changes back into the saved XML. Always ask for the publisher prefix before generating any XML.
+description: Generate source-controlled, unmanaged Dataverse solution XML files (customizations.xml, solution.xml, pack.sh) without a live environment. Use when the user wants to create a new solution from scratch, add tables/fields/views/forms, or scaffold a model-driven app with AppModule and SiteMap. Adds and changes components by regenerating, does not remove them, and pulls manual dev changes back into the saved XML. Also use when the user asks what changed in the dev environment, wants to sync or pull the saved XML with dev, or says they made changes by hand in dev. Always ask for the publisher prefix before generating any XML.
 ---
 
 # Skill: Dataverse Solution Generation (Source-Controlled XML)
@@ -77,6 +77,8 @@ What the tests showed, so you can warn the user:
 4. Import the same managed zip into the sandbox, then production.
 
 ### Bringing manual changes back from dev
+
+Use this when the user asks what changed in dev, wants the saved XML brought in line with dev, or says they edited the solution by hand in dev. Requests look like: "what has changed in dev since I last saved TodoSolution?" or "bring my manual changes in dev back into the saved XML". You need the dev URL (`pac env list`, with `pac` already authenticated), the solution's unique name (`pac solution list --environment <dev-url>`) and the folder holding the saved `solution.xml`. Run `scripts/pull.py` yourself and show the user the report. Describe what exists on each side; do not guess who changed what or when (a column in dev that is missing from the saved XML may have been dropped from the XML, not added in dev). To fold a change into the saved XML in the templates' style, add `--keep <folder>` so dev's extracted export is left in that folder, then read the component's definition from its `customizations.xml`. Use `--apply` only if the user asks for dev's export to replace the saved XML.
 
 `scripts/pull.py --env <dev-url> --solution <UniqueName> --dir <SolutionDir>` exports the **unmanaged** solution from dev and reports what differs from the saved XML, in both directions: in dev but not in the saved XML, in the saved XML but not in dev, and different between the two. It compares tables, custom columns and their types, labels and options, views (name and columns), forms (fields), environment variables, connection references and app tables. Platform system columns and system views are ignored. It changes nothing unless you add `--apply`.
 
