@@ -1,0 +1,366 @@
+{
+ "code": "ad",
+ "desc": "add a picklist option",
+ "dev": {
+  "import_r1": {
+   "error": null,
+   "ok": true
+  },
+  "observed_after_overwrite_r2": {
+   "apps": {
+    "dvgad_app": [
+     "dvgad_alpha",
+     "dvgad_app",
+     "dvgad_beta"
+    ]
+   },
+   "connrefs": [
+    "dvgad_cr1"
+   ],
+   "entities": {
+    "dvgad_alpha": {
+     "attrs": {
+      "createdby": "lookup",
+      "createdon": "datetime",
+      "createdonbehalfby": "lookup",
+      "dvgad_alphaid": "primarykey",
+      "dvgad_amount": "decimal",
+      "dvgad_flag": "bit",
+      "dvgad_name": "nvarchar",
+      "dvgad_status": "picklist",
+      "importsequencenumber": "int",
+      "modifiedby": "lookup",
+      "modifiedon": "datetime",
+      "modifiedonbehalfby": "lookup",
+      "overriddencreatedon": "datetime",
+      "ownerid": "owner",
+      "owningbusinessunit": "lookup",
+      "owningteam": "lookup",
+      "owninguser": "lookup",
+      "statecode": "state",
+      "statuscode": "status",
+      "timezoneruleversionnumber": "int",
+      "utcconversiontimezonecode": "int"
+     },
+     "labels": {
+      "createdby": "Created By",
+      "createdon": "Created On",
+      "createdonbehalfby": "Created By (Delegate)",
+      "dvgad_alphaid": "Alpha",
+      "dvgad_amount": "Amount",
+      "dvgad_flag": "Flag",
+      "dvgad_name": "Name",
+      "dvgad_status": "Status",
+      "importsequencenumber": "Import Sequence Number",
+      "modifiedby": "Modified By",
+      "modifiedon": "Modified On",
+      "modifiedonbehalfby": "Modified By (Delegate)",
+      "overriddencreatedon": "Record Created On",
+      "ownerid": "Owner",
+      "owningbusinessunit": "Owning Business Unit",
+      "owningteam": "Owning Team",
+      "owninguser": "Owning User",
+      "statecode": "Status",
+      "statuscode": "Status Reason",
+      "timezoneruleversionnumber": "Time Zone Rule Version Number",
+      "utcconversiontimezonecode": "UTC Conversion Time Zone Code"
+     },
+     "options": {
+      "dvgad_status": [
+       "100000000",
+       "100000001",
+       "100000002",
+       "100000003"
+      ]
+     },
+     "views": [
+      "All Alphas ad",
+      "Quick Find Alphas ad"
+     ]
+    },
+    "dvgad_beta": {
+     "attrs": {
+      "createdby": "lookup",
+      "createdon": "datetime",
+      "createdonbehalfby": "lookup",
+      "dvgad_betaid": "primarykey",
+      "dvgad_name": "nvarchar",
+      "dvgad_qty": "int",
+      "importsequencenumber": "int",
+      "modifiedby": "lookup",
+      "modifiedon": "datetime",
+      "modifiedonbehalfby": "lookup",
+      "overriddencreatedon": "datetime",
+      "ownerid": "owner",
+      "owningbusinessunit": "lookup",
+      "owningteam": "lookup",
+      "owninguser": "lookup",
+      "statecode": "state",
+      "statuscode": "status",
+      "timezoneruleversionnumber": "int",
+      "utcconversiontimezonecode": "int"
+     },
+     "labels": {
+      "createdby": "Created By",
+      "createdon": "Created On",
+      "createdonbehalfby": "Created By (Delegate)",
+      "dvgad_betaid": "Beta",
+      "dvgad_name": "Name",
+      "dvgad_qty": "Quantity",
+      "importsequencenumber": "Import Sequence Number",
+      "modifiedby": "Modified By",
+      "modifiedon": "Modified On",
+      "modifiedonbehalfby": "Modified By (Delegate)",
+      "overriddencreatedon": "Record Created On",
+      "ownerid": "Owner",
+      "owningbusinessunit": "Owning Business Unit",
+      "owningteam": "Owning Team",
+      "owninguser": "Owning User",
+      "statecode": "Status",
+      "statuscode": "Status Reason",
+      "timezoneruleversionnumber": "Time Zone Rule Version Number",
+      "utcconversiontimezonecode": "UTC Conversion Time Zone Code"
+     },
+     "options": {},
+     "views": [
+      "All Betas ad",
+      "Quick Find Betas ad"
+     ]
+    }
+   },
+   "envvars": [
+    {
+     "default": "x",
+     "name": "dvgad_ev1"
+    },
+    {
+     "default": "yes",
+     "name": "dvgad_ev2"
+    }
+   ],
+   "roots": [
+    "1:dvgad_alpha",
+    "1:dvgad_beta",
+    "62:dvgad_app",
+    "80:dvgad_app"
+   ],
+   "version": "1.0.0.1"
+  },
+  "observed_after_reset_r2": {
+   "apps": {
+    "dvgad_app": [
+     "dvgad_alpha",
+     "dvgad_app",
+     "dvgad_beta"
+    ]
+   },
+   "connrefs": [
+    "dvgad_cr1"
+   ],
+   "entities": {
+    "dvgad_alpha": {
+     "attrs": {
+      "createdby": "lookup",
+      "createdon": "datetime",
+      "createdonbehalfby": "lookup",
+      "dvgad_alphaid": "primarykey",
+      "dvgad_amount": "decimal",
+      "dvgad_flag": "bit",
+      "dvgad_name": "nvarchar",
+      "dvgad_status": "picklist",
+      "importsequencenumber": "int",
+      "modifiedby": "lookup",
+      "modifiedon": "datetime",
+      "modifiedonbehalfby": "lookup",
+      "overriddencreatedon": "datetime",
+      "ownerid": "owner",
+      "owningbusinessunit": "lookup",
+      "owningteam": "lookup",
+      "owninguser": "lookup",
+      "statecode": "state",
+      "statuscode": "status",
+      "timezoneruleversionnumber": "int",
+      "utcconversiontimezonecode": "int"
+     },
+     "labels": {
+      "createdby": "Created By",
+      "createdon": "Created On",
+      "createdonbehalfby": "Created By (Delegate)",
+      "dvgad_alphaid": "Alpha",
+      "dvgad_amount": "Amount",
+      "dvgad_flag": "Flag",
+      "dvgad_name": "Name",
+      "dvgad_status": "Status",
+      "importsequencenumber": "Import Sequence Number",
+      "modifiedby": "Modified By",
+      "modifiedon": "Modified On",
+      "modifiedonbehalfby": "Modified By (Delegate)",
+      "overriddencreatedon": "Record Created On",
+      "ownerid": "Owner",
+      "owningbusinessunit": "Owning Business Unit",
+      "owningteam": "Owning Team",
+      "owninguser": "Owning User",
+      "statecode": "Status",
+      "statuscode": "Status Reason",
+      "timezoneruleversionnumber": "Time Zone Rule Version Number",
+      "utcconversiontimezonecode": "UTC Conversion Time Zone Code"
+     },
+     "options": {
+      "dvgad_status": [
+       "100000000",
+       "100000001",
+       "100000002",
+       "100000003"
+      ]
+     },
+     "views": [
+      "All Alphas ad",
+      "Quick Find Alphas ad"
+     ]
+    },
+    "dvgad_beta": {
+     "attrs": {
+      "createdby": "lookup",
+      "createdon": "datetime",
+      "createdonbehalfby": "lookup",
+      "dvgad_betaid": "primarykey",
+      "dvgad_name": "nvarchar",
+      "dvgad_qty": "int",
+      "importsequencenumber": "int",
+      "modifiedby": "lookup",
+      "modifiedon": "datetime",
+      "modifiedonbehalfby": "lookup",
+      "overriddencreatedon": "datetime",
+      "ownerid": "owner",
+      "owningbusinessunit": "lookup",
+      "owningteam": "lookup",
+      "owninguser": "lookup",
+      "statecode": "state",
+      "statuscode": "status",
+      "timezoneruleversionnumber": "int",
+      "utcconversiontimezonecode": "int"
+     },
+     "labels": {
+      "createdby": "Created By",
+      "createdon": "Created On",
+      "createdonbehalfby": "Created By (Delegate)",
+      "dvgad_betaid": "Beta",
+      "dvgad_name": "Name",
+      "dvgad_qty": "Quantity",
+      "importsequencenumber": "Import Sequence Number",
+      "modifiedby": "Modified By",
+      "modifiedon": "Modified On",
+      "modifiedonbehalfby": "Modified By (Delegate)",
+      "overriddencreatedon": "Record Created On",
+      "ownerid": "Owner",
+      "owningbusinessunit": "Owning Business Unit",
+      "owningteam": "Owning Team",
+      "owninguser": "Owning User",
+      "statecode": "Status",
+      "statuscode": "Status Reason",
+      "timezoneruleversionnumber": "Time Zone Rule Version Number",
+      "utcconversiontimezonecode": "UTC Conversion Time Zone Code"
+     },
+     "options": {},
+     "views": [
+      "All Betas ad",
+      "Quick Find Betas ad"
+     ]
+    }
+   },
+   "envvars": [
+    {
+     "default": "x",
+     "name": "dvgad_ev1"
+    },
+    {
+     "default": "yes",
+     "name": "dvgad_ev2"
+    }
+   ],
+   "roots": [
+    "1:dvgad_alpha",
+    "1:dvgad_beta",
+    "62:dvgad_app",
+    "80:dvgad_app"
+   ],
+   "version": "1.0.0.1"
+  },
+  "overwrite_r2": {
+   "error": null,
+   "ok": true
+  },
+  "reset_import_r2": {
+   "error": null,
+   "ok": true
+  },
+  "wrapper_delete_r2": true
+ },
+ "mode": "upgrade",
+ "target": {
+  "after_install_r1": {
+   "app": "exists",
+   "columns": {
+    "alpha.amount": "exists",
+    "alpha.flag": "exists",
+    "alpha.name": "exists",
+    "alpha.status": "exists",
+    "beta.name": "exists",
+    "beta.qty": "exists"
+   },
+   "connrefs": [
+    "dvgad_cr1"
+   ],
+   "envvars": [
+    "dvgad_ev1",
+    "dvgad_ev2"
+   ],
+   "tables": {
+    "alpha": "exists",
+    "beta": "exists"
+   },
+   "views": [
+    "All Alphas ad",
+    "All Betas ad",
+    "Quick Find Alphas ad",
+    "Quick Find Betas ad"
+   ]
+  },
+  "after_upgrade_r2": {
+   "app": "exists",
+   "columns": {
+    "alpha.amount": "exists",
+    "alpha.flag": "exists",
+    "alpha.name": "exists",
+    "alpha.status": "exists",
+    "beta.name": "exists",
+    "beta.qty": "exists"
+   },
+   "connrefs": [
+    "dvgad_cr1"
+   ],
+   "envvars": [
+    "dvgad_ev1",
+    "dvgad_ev2"
+   ],
+   "tables": {
+    "alpha": "exists",
+    "beta": "exists"
+   },
+   "views": [
+    "All Alphas ad",
+    "All Betas ad",
+    "Quick Find Alphas ad",
+    "Quick Find Betas ad"
+   ]
+  },
+  "install_r1": {
+   "error": null,
+   "ok": true
+  },
+  "upgrade_r2": {
+   "error": null,
+   "ok": true
+  }
+ }
+}

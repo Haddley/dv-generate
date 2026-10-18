@@ -1,0 +1,58 @@
+<ImportExportXml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" OrganizationVersion="9.2.26092.158" OrganizationSchemaType="Standard" CRMServerServiceabilityVersion="9.2.26092.00168">
+  <Entities>
+    <Entity>
+      <Name LocalizedName="Widget" OriginalName="Widget">dvgen_widget</Name>
+      <EntityInfo><entity Name="dvgen_widget">
+        <LocalizedNames><LocalizedName description="Widget" languagecode="1033" /></LocalizedNames>
+        <LocalizedCollectionNames><LocalizedCollectionName description="Widgets" languagecode="1033" /></LocalizedCollectionNames>
+        <Descriptions><Description description="" languagecode="1033" /></Descriptions>
+        <attributes><attribute PhysicalName="dvgen_name">
+  <Type>nvarchar</Type><Name>dvgen_name</Name><LogicalName>dvgen_name</LogicalName>
+  <RequiredLevel>none</RequiredLevel>
+  <DisplayMask>PrimaryName|ValidForAdvancedFind|ValidForForm|ValidForGrid|RequiredForForm</DisplayMask>
+  <ImeMode>auto</ImeMode>
+  <ValidForUpdateApi>1</ValidForUpdateApi><ValidForReadApi>1</ValidForReadApi><ValidForCreateApi>1</ValidForCreateApi>
+  <IsCustomField>1</IsCustomField><IsAuditEnabled>1</IsAuditEnabled><IsSecured>0</IsSecured>
+  <IntroducedVersion>1.0</IntroducedVersion><IsCustomizable>1</IsCustomizable><IsRenameable>1</IsRenameable>
+  <CanModifySearchSettings>1</CanModifySearchSettings><CanModifyRequirementLevelSettings>1</CanModifyRequirementLevelSettings>
+  <CanModifyAdditionalSettings>1</CanModifyAdditionalSettings><SourceType>0</SourceType>
+  <IsGlobalFilterEnabled>0</IsGlobalFilterEnabled><IsSortableEnabled>0</IsSortableEnabled>
+  <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings><CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
+  <IsDataSourceSecret>0</IsDataSourceSecret><AutoNumberFormat></AutoNumberFormat>
+  <IsSearchable>0</IsSearchable><IsFilterable>0</IsFilterable><IsRetrievable>0</IsRetrievable><IsLocalizable>0</IsLocalizable>
+  <Format>text</Format><MaxLength>100</MaxLength><Length>200</Length>
+  <displaynames><displayname description="Name" languagecode="1033" /></displaynames>
+  <Descriptions><Description description="" languagecode="1033" /></Descriptions>
+</attribute></attributes>
+        <EntitySetName>dvgen_widgets</EntitySetName>
+        <IsDuplicateCheckSupported>1</IsDuplicateCheckSupported><IsBusinessProcessEnabled>0</IsBusinessProcessEnabled><IsRequiredOffline>0</IsRequiredOffline><IsInteractionCentricEnabled>0</IsInteractionCentricEnabled><IsCollaboration>0</IsCollaboration><AutoRouteToOwnerQueue>0</AutoRouteToOwnerQueue><IsConnectionsEnabled>0</IsConnectionsEnabled><EntityColor></EntityColor><IsDocumentManagementEnabled>0</IsDocumentManagementEnabled><AutoCreateAccessTeams>0</AutoCreateAccessTeams><IsOneNoteIntegrationEnabled>0</IsOneNoteIntegrationEnabled><IsKnowledgeManagementEnabled>0</IsKnowledgeManagementEnabled><IsSLAEnabled>0</IsSLAEnabled><IsDocumentRecommendationsEnabled>0</IsDocumentRecommendationsEnabled><IsBPFEntity>0</IsBPFEntity><OwnershipTypeMask>UserOwned</OwnershipTypeMask><IsAuditEnabled>0</IsAuditEnabled><IsRetrieveAuditEnabled>0</IsRetrieveAuditEnabled><IsRetrieveMultipleAuditEnabled>0</IsRetrieveMultipleAuditEnabled><IsActivity>0</IsActivity><ActivityTypeMask></ActivityTypeMask><IsActivityParty>0</IsActivityParty><IsReplicated>0</IsReplicated><IsReplicationUserFiltered>0</IsReplicationUserFiltered><IsMailMergeEnabled>1</IsMailMergeEnabled><IsVisibleInMobile>0</IsVisibleInMobile><IsVisibleInMobileClient>0</IsVisibleInMobileClient><IsReadOnlyInMobileClient>0</IsReadOnlyInMobileClient><IsOfflineInMobileClient>1</IsOfflineInMobileClient><DaysSinceRecordLastModified>0</DaysSinceRecordLastModified><MobileOfflineFilters></MobileOfflineFilters><IsMapiGridEnabled>1</IsMapiGridEnabled><IsReadingPaneEnabled>1</IsReadingPaneEnabled><IsQuickCreateEnabled>0</IsQuickCreateEnabled><SyncToExternalSearchIndex>0</SyncToExternalSearchIndex><IntroducedVersion>1.0</IntroducedVersion><IsCustomizable>1</IsCustomizable><IsRenameable>1</IsRenameable><IsMappable>1</IsMappable><CanModifyAuditSettings>1</CanModifyAuditSettings><CanModifyMobileVisibility>1</CanModifyMobileVisibility><CanModifyMobileClientVisibility>1</CanModifyMobileClientVisibility><CanModifyMobileClientReadOnly>1</CanModifyMobileClientReadOnly><CanModifyMobileClientOffline>1</CanModifyMobileClientOffline><CanModifyConnectionSettings>1</CanModifyConnectionSettings><CanModifyDuplicateDetectionSettings>1</CanModifyDuplicateDetectionSettings><CanModifyMailMergeSettings>1</CanModifyMailMergeSettings><CanModifyQueueSettings>1</CanModifyQueueSettings><CanCreateAttributes>1</CanCreateAttributes><CanCreateForms>1</CanCreateForms><CanCreateCharts>1</CanCreateCharts><CanCreateViews>1</CanCreateViews><CanModifyAdditionalSettings>1</CanModifyAdditionalSettings><CanEnableSyncToExternalSearchIndex>1</CanEnableSyncToExternalSearchIndex><EnforceStateTransitions>0</EnforceStateTransitions><CanChangeHierarchicalRelationship>1</CanChangeHierarchicalRelationship><EntityHelpUrlEnabled>0</EntityHelpUrlEnabled><ChangeTrackingEnabled>1</ChangeTrackingEnabled><CanChangeTrackingBeEnabled>1</CanChangeTrackingBeEnabled><IsEnabledForExternalChannels>0</IsEnabledForExternalChannels><IsMSTeamsIntegrationEnabled>0</IsMSTeamsIntegrationEnabled><IsSolutionAware>0</IsSolutionAware>
+      </entity></EntityInfo>
+      <RibbonDiffXml><CustomActions /><Templates><RibbonTemplates Id="Mscrm.Templates"></RibbonTemplates></Templates><CommandDefinitions /><RuleDefinitions><TabDisplayRules /><DisplayRules /><EnableRules /></RuleDefinitions><LocLabels /></RibbonDiffXml>
+      <FormXml><forms type="main"><systemform><formid>{4F826CBE-5992-4A93-A6BC-586EC89B5A2D}</formid><IntroducedVersion>1.0</IntroducedVersion><FormPresentation>1</FormPresentation><FormActivationState>1</FormActivationState>
+<form><tabs><tab verticallayout="true" id="{8458D503-7F10-4837-926E-8C80DC3D5D94}" IsUserDefined="1"><labels><label description="General" languagecode="1033" /></labels>
+<columns><column width="100%"><sections><section showlabel="false" showbar="false" IsUserDefined="0" id="{4E313B92-531E-48EB-AECF-F872E5147A33}"><labels><label description="General" languagecode="1033" /></labels>
+<rows><row><cell id="{F6C0E5C5-3AD2-497F-806A-8D8F9B107140}"><labels><label description="Name" languagecode="1033" /></labels><control id="dvgen_name" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="dvgen_name" /></cell></row>
+<row><cell id="{BECE30D2-9BDB-487F-BEA9-1DCF138E5E2F}"><labels><label description="Owner" languagecode="1033" /></labels><control id="ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" /></cell></row></rows>
+</section></sections></column></columns></tab></tabs></form>
+<IsCustomizable>1</IsCustomizable><CanBeDeleted>1</CanBeDeleted>
+<LocalizedNames><LocalizedName description="Information" languagecode="1033" /></LocalizedNames><Descriptions><Description description="" languagecode="1033" /></Descriptions>
+</systemform></forms></FormXml>
+      <SavedQueries><savedqueries><savedquery><IsCustomizable>1</IsCustomizable><CanBeDeleted>1</CanBeDeleted><isquickfindquery>0</isquickfindquery><isprivate>0</isprivate><isdefault>1</isdefault><savedqueryid>{E58019DF-12F3-505F-B360-6E9AAEFDB657}</savedqueryid><layoutxml><grid name="resultset" jump="dvgen_name" select="1" icon="1" preview="1"><row name="result" id="dvgen_widgetid"><cell name="dvgen_name" width="300" /></row></grid></layoutxml><querytype>0</querytype><fetchxml><fetch version="1.0" mapping="logical"><entity name="dvgen_widget"><attribute name="dvgen_widgetid" /><attribute name="dvgen_name" /><order attribute="dvgen_name" descending="false" /><filter type="and"><condition attribute="statecode" operator="eq" value="0" /></filter></entity></fetch></fetchxml><IntroducedVersion>1.0.0.0</IntroducedVersion><LocalizedNames><LocalizedName description="All Widgets" languagecode="1033" /></LocalizedNames></savedquery><savedquery><IsCustomizable>1</IsCustomizable><CanBeDeleted>1</CanBeDeleted><isquickfindquery>1</isquickfindquery><isprivate>0</isprivate><isdefault>1</isdefault><savedqueryid>{1EE73FE5-C273-5CDF-886F-4340537059BA}</savedqueryid><layoutxml><grid name="resultset" jump="dvgen_name" select="1" icon="1" preview="1"><row name="result" id="dvgen_widgetid"><cell name="dvgen_name" width="300" /></row></grid></layoutxml><querytype>4</querytype><fetchxml><fetch version="1.0" mapping="logical"><entity name="dvgen_widget"><attribute name="dvgen_widgetid" /><attribute name="dvgen_name" /><order attribute="dvgen_name" descending="false" /><filter type="and"><condition attribute="statecode" operator="eq" value="0" /></filter><filter type="or" isquickfindfields="1"><condition attribute="dvgen_name" operator="like" value="{0}" /></filter></entity></fetch></fetchxml><IntroducedVersion>1.0.0.0</IntroducedVersion><LocalizedNames><LocalizedName description="Quick Find Widgets" languagecode="1033" /></LocalizedNames></savedquery></savedqueries></SavedQueries>
+    </Entity>
+  </Entities>
+  <optionsets />
+  <CustomControls />
+  <EntityDataProviders />
+  <connectionreferences>
+    <connectionreference connectionreferencelogicalname="dvgen_MyConnRef">
+      <connectionreferencedisplayname>MyConnRef</connectionreferencedisplayname>
+      <connectorid>/providers/Microsoft.PowerApps/apis/shared_azureblob</connectorid>
+      <description>Test connection reference</description>
+      <iscustomizable>1</iscustomizable>
+      <promptingbehavior>0</promptingbehavior>
+      <statecode>0</statecode>
+      <statuscode>1</statuscode>
+    </connectionreference>
+  </connectionreferences>
+  <Languages><Language>1033</Language></Languages>
+</ImportExportXml>

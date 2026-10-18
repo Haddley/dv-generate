@@ -1,0 +1,312 @@
+{
+ "code": "ah",
+ "desc": "remove a table, keep the app",
+ "dev": {
+  "import_r1": {
+   "error": null,
+   "ok": true
+  },
+  "observed_after_overwrite_r2": {
+   "apps": {
+    "dvgah_app": [
+     "dvgah_alpha",
+     "dvgah_app"
+    ]
+   },
+   "connrefs": [
+    "dvgah_cr1"
+   ],
+   "entities": {
+    "dvgah_alpha": {
+     "attrs": {
+      "createdby": "lookup",
+      "createdon": "datetime",
+      "createdonbehalfby": "lookup",
+      "dvgah_alphaid": "primarykey",
+      "dvgah_amount": "decimal",
+      "dvgah_flag": "bit",
+      "dvgah_name": "nvarchar",
+      "dvgah_status": "picklist",
+      "importsequencenumber": "int",
+      "modifiedby": "lookup",
+      "modifiedon": "datetime",
+      "modifiedonbehalfby": "lookup",
+      "overriddencreatedon": "datetime",
+      "ownerid": "owner",
+      "owningbusinessunit": "lookup",
+      "owningteam": "lookup",
+      "owninguser": "lookup",
+      "statecode": "state",
+      "statuscode": "status",
+      "timezoneruleversionnumber": "int",
+      "utcconversiontimezonecode": "int"
+     },
+     "labels": {
+      "createdby": "Created By",
+      "createdon": "Created On",
+      "createdonbehalfby": "Created By (Delegate)",
+      "dvgah_alphaid": "Alpha",
+      "dvgah_amount": "Amount",
+      "dvgah_flag": "Flag",
+      "dvgah_name": "Name",
+      "dvgah_status": "Status",
+      "importsequencenumber": "Import Sequence Number",
+      "modifiedby": "Modified By",
+      "modifiedon": "Modified On",
+      "modifiedonbehalfby": "Modified By (Delegate)",
+      "overriddencreatedon": "Record Created On",
+      "ownerid": "Owner",
+      "owningbusinessunit": "Owning Business Unit",
+      "owningteam": "Owning Team",
+      "owninguser": "Owning User",
+      "statecode": "Status",
+      "statuscode": "Status Reason",
+      "timezoneruleversionnumber": "Time Zone Rule Version Number",
+      "utcconversiontimezonecode": "UTC Conversion Time Zone Code"
+     },
+     "options": {
+      "dvgah_status": [
+       "100000000",
+       "100000001",
+       "100000002"
+      ]
+     },
+     "views": [
+      "All Alphas ah",
+      "Quick Find Alphas ah"
+     ]
+    },
+    "dvgah_beta": {
+     "attrs": {
+      "createdby": "lookup",
+      "createdon": "datetime",
+      "createdonbehalfby": "lookup",
+      "dvgah_betaid": "primarykey",
+      "dvgah_name": "nvarchar",
+      "dvgah_qty": "int",
+      "importsequencenumber": "int",
+      "modifiedby": "lookup",
+      "modifiedon": "datetime",
+      "modifiedonbehalfby": "lookup",
+      "overriddencreatedon": "datetime",
+      "ownerid": "owner",
+      "owningbusinessunit": "lookup",
+      "owningteam": "lookup",
+      "owninguser": "lookup",
+      "statecode": "state",
+      "statuscode": "status",
+      "timezoneruleversionnumber": "int",
+      "utcconversiontimezonecode": "int"
+     },
+     "labels": {
+      "createdby": "Created By",
+      "createdon": "Created On",
+      "createdonbehalfby": "Created By (Delegate)",
+      "dvgah_betaid": "Beta",
+      "dvgah_name": "Name",
+      "dvgah_qty": "Quantity",
+      "importsequencenumber": "Import Sequence Number",
+      "modifiedby": "Modified By",
+      "modifiedon": "Modified On",
+      "modifiedonbehalfby": "Modified By (Delegate)",
+      "overriddencreatedon": "Record Created On",
+      "ownerid": "Owner",
+      "owningbusinessunit": "Owning Business Unit",
+      "owningteam": "Owning Team",
+      "owninguser": "Owning User",
+      "statecode": "Status",
+      "statuscode": "Status Reason",
+      "timezoneruleversionnumber": "Time Zone Rule Version Number",
+      "utcconversiontimezonecode": "UTC Conversion Time Zone Code"
+     },
+     "options": {},
+     "views": [
+      "All Betas ah",
+      "Quick Find Betas ah"
+     ]
+    }
+   },
+   "envvars": [
+    {
+     "default": "x",
+     "name": "dvgah_ev1"
+    },
+    {
+     "default": "yes",
+     "name": "dvgah_ev2"
+    }
+   ],
+   "roots": [
+    "1:dvgah_alpha",
+    "1:dvgah_beta",
+    "62:dvgah_app",
+    "80:dvgah_app"
+   ],
+   "version": "1.0.0.1"
+  },
+  "observed_after_reset_r2": {
+   "apps": {
+    "dvgah_app": [
+     "dvgah_alpha",
+     "dvgah_app"
+    ]
+   },
+   "connrefs": [
+    "dvgah_cr1"
+   ],
+   "entities": {
+    "dvgah_alpha": {
+     "attrs": {
+      "createdby": "lookup",
+      "createdon": "datetime",
+      "createdonbehalfby": "lookup",
+      "dvgah_alphaid": "primarykey",
+      "dvgah_amount": "decimal",
+      "dvgah_flag": "bit",
+      "dvgah_name": "nvarchar",
+      "dvgah_status": "picklist",
+      "importsequencenumber": "int",
+      "modifiedby": "lookup",
+      "modifiedon": "datetime",
+      "modifiedonbehalfby": "lookup",
+      "overriddencreatedon": "datetime",
+      "ownerid": "owner",
+      "owningbusinessunit": "lookup",
+      "owningteam": "lookup",
+      "owninguser": "lookup",
+      "statecode": "state",
+      "statuscode": "status",
+      "timezoneruleversionnumber": "int",
+      "utcconversiontimezonecode": "int"
+     },
+     "labels": {
+      "createdby": "Created By",
+      "createdon": "Created On",
+      "createdonbehalfby": "Created By (Delegate)",
+      "dvgah_alphaid": "Alpha",
+      "dvgah_amount": "Amount",
+      "dvgah_flag": "Flag",
+      "dvgah_name": "Name",
+      "dvgah_status": "Status",
+      "importsequencenumber": "Import Sequence Number",
+      "modifiedby": "Modified By",
+      "modifiedon": "Modified On",
+      "modifiedonbehalfby": "Modified By (Delegate)",
+      "overriddencreatedon": "Record Created On",
+      "ownerid": "Owner",
+      "owningbusinessunit": "Owning Business Unit",
+      "owningteam": "Owning Team",
+      "owninguser": "Owning User",
+      "statecode": "Status",
+      "statuscode": "Status Reason",
+      "timezoneruleversionnumber": "Time Zone Rule Version Number",
+      "utcconversiontimezonecode": "UTC Conversion Time Zone Code"
+     },
+     "options": {
+      "dvgah_status": [
+       "100000000",
+       "100000001",
+       "100000002"
+      ]
+     },
+     "views": [
+      "All Alphas ah",
+      "Quick Find Alphas ah"
+     ]
+    }
+   },
+   "envvars": [
+    {
+     "default": "x",
+     "name": "dvgah_ev1"
+    },
+    {
+     "default": "yes",
+     "name": "dvgah_ev2"
+    }
+   ],
+   "roots": [
+    "1:dvgah_alpha",
+    "62:dvgah_app",
+    "80:dvgah_app"
+   ],
+   "version": "1.0.0.1"
+  },
+  "overwrite_r2": {
+   "error": null,
+   "ok": true
+  },
+  "reset_import_r2": {
+   "error": null,
+   "ok": true
+  },
+  "wrapper_delete_r2": true
+ },
+ "mode": "upgrade",
+ "target": {
+  "after_install_r1": {
+   "app": "exists",
+   "columns": {
+    "alpha.amount": "exists",
+    "alpha.flag": "exists",
+    "alpha.name": "exists",
+    "alpha.status": "exists",
+    "beta.name": "exists",
+    "beta.qty": "exists"
+   },
+   "connrefs": [
+    "dvgah_cr1"
+   ],
+   "envvars": [
+    "dvgah_ev1",
+    "dvgah_ev2"
+   ],
+   "tables": {
+    "alpha": "exists",
+    "beta": "exists"
+   },
+   "views": [
+    "All Alphas ah",
+    "All Betas ah",
+    "Quick Find Alphas ah",
+    "Quick Find Betas ah"
+   ]
+  },
+  "after_upgrade_r2": {
+   "app": "exists",
+   "columns": {
+    "alpha.amount": "exists",
+    "alpha.flag": "exists",
+    "alpha.name": "exists",
+    "alpha.status": "exists",
+    "beta.name": "exists",
+    "beta.qty": "exists"
+   },
+   "connrefs": [
+    "dvgah_cr1"
+   ],
+   "envvars": [
+    "dvgah_ev1",
+    "dvgah_ev2"
+   ],
+   "tables": {
+    "alpha": "exists",
+    "beta": "exists"
+   },
+   "views": [
+    "All Alphas ah",
+    "All Betas ah",
+    "Quick Find Alphas ah",
+    "Quick Find Betas ah"
+   ]
+  },
+  "install_r1": {
+   "error": null,
+   "ok": true
+  },
+  "upgrade_r2": {
+   "error": "Error: ImportAsHolding failed with exception :The Entity(bfaba902-11ca-4a44-a25b-46cc05498260) component cannot be deleted because it is referenced by 1 other components. For a list of referenced components, use the RetrieveDependenciesForDeleteRequest.",
+   "ok": false
+  }
+ }
+}

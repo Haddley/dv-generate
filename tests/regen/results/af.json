@@ -1,0 +1,161 @@
+{
+ "code": "af",
+ "desc": "change a column type (decimal -> int)",
+ "dev": {
+  "import_r1": {
+   "error": null,
+   "ok": true
+  },
+  "observed_after_overwrite_r2": {
+   "apps": {
+    "dvgaf_app": [
+     "dvgaf_alpha",
+     "dvgaf_app",
+     "dvgaf_beta"
+    ]
+   },
+   "connrefs": [
+    "dvgaf_cr1"
+   ],
+   "entities": {
+    "dvgaf_alpha": {
+     "attrs": {
+      "createdby": "lookup",
+      "createdon": "datetime",
+      "createdonbehalfby": "lookup",
+      "dvgaf_alphaid": "primarykey",
+      "dvgaf_amount": "decimal",
+      "dvgaf_flag": "bit",
+      "dvgaf_name": "nvarchar",
+      "dvgaf_status": "picklist",
+      "importsequencenumber": "int",
+      "modifiedby": "lookup",
+      "modifiedon": "datetime",
+      "modifiedonbehalfby": "lookup",
+      "overriddencreatedon": "datetime",
+      "ownerid": "owner",
+      "owningbusinessunit": "lookup",
+      "owningteam": "lookup",
+      "owninguser": "lookup",
+      "statecode": "state",
+      "statuscode": "status",
+      "timezoneruleversionnumber": "int",
+      "utcconversiontimezonecode": "int"
+     },
+     "labels": {
+      "createdby": "Created By",
+      "createdon": "Created On",
+      "createdonbehalfby": "Created By (Delegate)",
+      "dvgaf_alphaid": "Alpha",
+      "dvgaf_amount": "Amount",
+      "dvgaf_flag": "Flag",
+      "dvgaf_name": "Name",
+      "dvgaf_status": "Status",
+      "importsequencenumber": "Import Sequence Number",
+      "modifiedby": "Modified By",
+      "modifiedon": "Modified On",
+      "modifiedonbehalfby": "Modified By (Delegate)",
+      "overriddencreatedon": "Record Created On",
+      "ownerid": "Owner",
+      "owningbusinessunit": "Owning Business Unit",
+      "owningteam": "Owning Team",
+      "owninguser": "Owning User",
+      "statecode": "Status",
+      "statuscode": "Status Reason",
+      "timezoneruleversionnumber": "Time Zone Rule Version Number",
+      "utcconversiontimezonecode": "UTC Conversion Time Zone Code"
+     },
+     "options": {
+      "dvgaf_status": [
+       "100000000",
+       "100000001",
+       "100000002"
+      ]
+     },
+     "views": [
+      "All Alphas af",
+      "Quick Find Alphas af"
+     ]
+    },
+    "dvgaf_beta": {
+     "attrs": {
+      "createdby": "lookup",
+      "createdon": "datetime",
+      "createdonbehalfby": "lookup",
+      "dvgaf_betaid": "primarykey",
+      "dvgaf_name": "nvarchar",
+      "dvgaf_qty": "int",
+      "importsequencenumber": "int",
+      "modifiedby": "lookup",
+      "modifiedon": "datetime",
+      "modifiedonbehalfby": "lookup",
+      "overriddencreatedon": "datetime",
+      "ownerid": "owner",
+      "owningbusinessunit": "lookup",
+      "owningteam": "lookup",
+      "owninguser": "lookup",
+      "statecode": "state",
+      "statuscode": "status",
+      "timezoneruleversionnumber": "int",
+      "utcconversiontimezonecode": "int"
+     },
+     "labels": {
+      "createdby": "Created By",
+      "createdon": "Created On",
+      "createdonbehalfby": "Created By (Delegate)",
+      "dvgaf_betaid": "Beta",
+      "dvgaf_name": "Name",
+      "dvgaf_qty": "Quantity",
+      "importsequencenumber": "Import Sequence Number",
+      "modifiedby": "Modified By",
+      "modifiedon": "Modified On",
+      "modifiedonbehalfby": "Modified By (Delegate)",
+      "overriddencreatedon": "Record Created On",
+      "ownerid": "Owner",
+      "owningbusinessunit": "Owning Business Unit",
+      "owningteam": "Owning Team",
+      "owninguser": "Owning User",
+      "statecode": "Status",
+      "statuscode": "Status Reason",
+      "timezoneruleversionnumber": "Time Zone Rule Version Number",
+      "utcconversiontimezonecode": "UTC Conversion Time Zone Code"
+     },
+     "options": {},
+     "views": [
+      "All Betas af",
+      "Quick Find Betas af"
+     ]
+    }
+   },
+   "envvars": [
+    {
+     "default": "x",
+     "name": "dvgaf_ev1"
+    },
+    {
+     "default": "yes",
+     "name": "dvgaf_ev2"
+    }
+   ],
+   "roots": [
+    "1:dvgaf_alpha",
+    "1:dvgaf_beta",
+    "62:dvgaf_app",
+    "80:dvgaf_app"
+   ],
+   "version": "1.0.0.0"
+  },
+  "overwrite_r2": {
+   "error": "Error: Attribute dvgaf_amount is a Decimal, but a Integer type was specified.",
+   "ok": false
+  },
+  "reset_import_r2": {
+   "error": "Error: Attribute dvgaf_amount is a Decimal, but a Integer type was specified.",
+   "ok": false
+  },
+  "wrapper_delete_r2": true
+ },
+ "fatal": "source stage: source reset import of release 2 failed: {'ok': False, 'error': 'Error: Attribute dvgaf_amount is a Decimal, but a Integer type was specified.'}",
+ "mode": "upgrade",
+ "target": {}
+}

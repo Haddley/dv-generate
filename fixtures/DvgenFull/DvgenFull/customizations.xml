@@ -1,0 +1,294 @@
+<ImportExportXml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    OrganizationVersion="9.2.26044.164" OrganizationSchemaType="Standard"
+    CRMServerServiceabilityVersion="9.2.26044.00164">
+<Entities>
+<Entity>
+<Name LocalizedName="Project" OriginalName="Project">dvgen_project</Name>
+<EntityInfo><entity Name="dvgen_project">
+<LocalizedNames><LocalizedName description="Project" languagecode="1033" /></LocalizedNames>
+<LocalizedCollectionNames><LocalizedCollectionName description="Projects" languagecode="1033" /></LocalizedCollectionNames>
+<Descriptions><Description description="" languagecode="1033" /></Descriptions>
+<attributes>
+<attribute PhysicalName="dvgen_name">
+  <Type>nvarchar</Type><Name>dvgen_name</Name><LogicalName>dvgen_name</LogicalName>
+  <RequiredLevel>none</RequiredLevel>
+  <DisplayMask>PrimaryName|ValidForAdvancedFind|ValidForForm|ValidForGrid|RequiredForForm</DisplayMask>
+  <ImeMode>auto</ImeMode>
+  <ValidForUpdateApi>1</ValidForUpdateApi><ValidForReadApi>1</ValidForReadApi><ValidForCreateApi>1</ValidForCreateApi>
+  <IsCustomField>1</IsCustomField><IsAuditEnabled>1</IsAuditEnabled><IsSecured>0</IsSecured>
+  <IntroducedVersion>1.0</IntroducedVersion><IsCustomizable>1</IsCustomizable><IsRenameable>1</IsRenameable>
+  <CanModifySearchSettings>1</CanModifySearchSettings><CanModifyRequirementLevelSettings>1</CanModifyRequirementLevelSettings>
+  <CanModifyAdditionalSettings>1</CanModifyAdditionalSettings><SourceType>0</SourceType>
+  <IsGlobalFilterEnabled>0</IsGlobalFilterEnabled><IsSortableEnabled>0</IsSortableEnabled>
+  <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings><CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
+  <IsDataSourceSecret>0</IsDataSourceSecret><AutoNumberFormat></AutoNumberFormat>
+  <IsSearchable>0</IsSearchable><IsFilterable>0</IsFilterable><IsRetrievable>0</IsRetrievable><IsLocalizable>0</IsLocalizable>
+  <Format>text</Format><MaxLength>100</MaxLength><Length>200</Length>
+  <displaynames><displayname description="Name" languagecode="1033" /></displaynames>
+  <Descriptions><Description description="" languagecode="1033" /></Descriptions>
+</attribute>
+<attribute PhysicalName="dvgen_description">
+  <Type>nvarchar</Type><Name>dvgen_description</Name><LogicalName>dvgen_description</LogicalName>
+  <RequiredLevel>none</RequiredLevel>
+  <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+  <ImeMode>auto</ImeMode>
+  <ValidForUpdateApi>1</ValidForUpdateApi><ValidForReadApi>1</ValidForReadApi><ValidForCreateApi>1</ValidForCreateApi>
+  <IsCustomField>1</IsCustomField><IsAuditEnabled>1</IsAuditEnabled><IsSecured>0</IsSecured>
+  <IntroducedVersion>1.0</IntroducedVersion><IsCustomizable>1</IsCustomizable><IsRenameable>1</IsRenameable>
+  <CanModifySearchSettings>1</CanModifySearchSettings><CanModifyRequirementLevelSettings>1</CanModifyRequirementLevelSettings>
+  <CanModifyAdditionalSettings>1</CanModifyAdditionalSettings><SourceType>0</SourceType>
+  <IsGlobalFilterEnabled>0</IsGlobalFilterEnabled><IsSortableEnabled>0</IsSortableEnabled>
+  <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings><CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
+  <IsDataSourceSecret>0</IsDataSourceSecret><AutoNumberFormat></AutoNumberFormat>
+  <IsSearchable>0</IsSearchable><IsFilterable>0</IsFilterable><IsRetrievable>0</IsRetrievable><IsLocalizable>0</IsLocalizable>
+  <Format>textarea</Format><MaxLength>2000</MaxLength><Length>4000</Length>
+  <displaynames><displayname description="Description" languagecode="1033" /></displaynames>
+  <Descriptions><Description description="" languagecode="1033" /></Descriptions>
+</attribute>
+<attribute PhysicalName="dvgen_budget">
+  <Type>decimal</Type><Name>dvgen_budget</Name><LogicalName>dvgen_budget</LogicalName>
+  <RequiredLevel>none</RequiredLevel>
+  <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+  <ImeMode>inactive</ImeMode>
+  <ValidForUpdateApi>1</ValidForUpdateApi><ValidForReadApi>1</ValidForReadApi><ValidForCreateApi>1</ValidForCreateApi>
+  <IsCustomField>1</IsCustomField><IsAuditEnabled>1</IsAuditEnabled><IsSecured>0</IsSecured>
+  <IntroducedVersion>1.0</IntroducedVersion><IsCustomizable>1</IsCustomizable><IsRenameable>1</IsRenameable>
+  <CanModifySearchSettings>1</CanModifySearchSettings><CanModifyRequirementLevelSettings>1</CanModifyRequirementLevelSettings>
+  <CanModifyAdditionalSettings>1</CanModifyAdditionalSettings><SourceType>0</SourceType>
+  <IsGlobalFilterEnabled>0</IsGlobalFilterEnabled><IsSortableEnabled>0</IsSortableEnabled>
+  <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings><CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
+  <IsDataSourceSecret>0</IsDataSourceSecret><AutoNumberFormat></AutoNumberFormat>
+  <IsSearchable>0</IsSearchable><IsFilterable>1</IsFilterable><IsRetrievable>1</IsRetrievable><IsLocalizable>0</IsLocalizable>
+  <Precision>2</Precision><MinValue>0</MinValue><MaxValue>100000000000</MaxValue>
+  <displaynames><displayname description="Budget" languagecode="1033" /></displaynames>
+  <Descriptions><Description description="" languagecode="1033" /></Descriptions>
+</attribute>
+<attribute PhysicalName="dvgen_headcount">
+  <Type>int</Type><Name>dvgen_headcount</Name><LogicalName>dvgen_headcount</LogicalName>
+  <RequiredLevel>none</RequiredLevel>
+  <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+  <ImeMode>inactive</ImeMode>
+  <ValidForUpdateApi>1</ValidForUpdateApi><ValidForReadApi>1</ValidForReadApi><ValidForCreateApi>1</ValidForCreateApi>
+  <IsCustomField>1</IsCustomField><IsAuditEnabled>1</IsAuditEnabled><IsSecured>0</IsSecured>
+  <IntroducedVersion>1.0</IntroducedVersion><IsCustomizable>1</IsCustomizable><IsRenameable>1</IsRenameable>
+  <CanModifySearchSettings>1</CanModifySearchSettings><CanModifyRequirementLevelSettings>1</CanModifyRequirementLevelSettings>
+  <CanModifyAdditionalSettings>1</CanModifyAdditionalSettings><SourceType>0</SourceType>
+  <IsGlobalFilterEnabled>0</IsGlobalFilterEnabled><IsSortableEnabled>0</IsSortableEnabled>
+  <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings><CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
+  <IsDataSourceSecret>0</IsDataSourceSecret><AutoNumberFormat></AutoNumberFormat>
+  <IsSearchable>0</IsSearchable><IsFilterable>1</IsFilterable><IsRetrievable>1</IsRetrievable><IsLocalizable>0</IsLocalizable>
+  <MinValue>-2147483648</MinValue><MaxValue>2147483647</MaxValue>
+  <displaynames><displayname description="Headcount" languagecode="1033" /></displaynames>
+  <Descriptions><Description description="" languagecode="1033" /></Descriptions>
+</attribute>
+<attribute PhysicalName="dvgen_startdate">
+  <Type>datetime</Type><Name>dvgen_startdate</Name><LogicalName>dvgen_startdate</LogicalName>
+  <RequiredLevel>none</RequiredLevel>
+  <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+  <ImeMode>inactive</ImeMode>
+  <ValidForUpdateApi>1</ValidForUpdateApi><ValidForReadApi>1</ValidForReadApi><ValidForCreateApi>1</ValidForCreateApi>
+  <IsCustomField>1</IsCustomField><IsAuditEnabled>1</IsAuditEnabled><IsSecured>0</IsSecured>
+  <IntroducedVersion>1.0</IntroducedVersion><IsCustomizable>1</IsCustomizable><IsRenameable>1</IsRenameable>
+  <CanModifySearchSettings>1</CanModifySearchSettings><CanModifyRequirementLevelSettings>1</CanModifyRequirementLevelSettings>
+  <CanModifyAdditionalSettings>1</CanModifyAdditionalSettings><SourceType>0</SourceType>
+  <IsGlobalFilterEnabled>0</IsGlobalFilterEnabled><IsSortableEnabled>0</IsSortableEnabled>
+  <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings><CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
+  <IsDataSourceSecret>0</IsDataSourceSecret><AutoNumberFormat></AutoNumberFormat>
+  <IsSearchable>0</IsSearchable><IsFilterable>1</IsFilterable><IsRetrievable>1</IsRetrievable><IsLocalizable>0</IsLocalizable>
+  <Format>date</Format>
+  <displaynames><displayname description="Start Date" languagecode="1033" /></displaynames>
+  <Descriptions><Description description="" languagecode="1033" /></Descriptions>
+</attribute>
+<attribute PhysicalName="dvgen_duedate">
+  <Type>datetime</Type><Name>dvgen_duedate</Name><LogicalName>dvgen_duedate</LogicalName>
+  <RequiredLevel>none</RequiredLevel>
+  <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+  <ImeMode>inactive</ImeMode>
+  <ValidForUpdateApi>1</ValidForUpdateApi><ValidForReadApi>1</ValidForReadApi><ValidForCreateApi>1</ValidForCreateApi>
+  <IsCustomField>1</IsCustomField><IsAuditEnabled>1</IsAuditEnabled><IsSecured>0</IsSecured>
+  <IntroducedVersion>1.0</IntroducedVersion><IsCustomizable>1</IsCustomizable><IsRenameable>1</IsRenameable>
+  <CanModifySearchSettings>1</CanModifySearchSettings><CanModifyRequirementLevelSettings>1</CanModifyRequirementLevelSettings>
+  <CanModifyAdditionalSettings>1</CanModifyAdditionalSettings><SourceType>0</SourceType>
+  <IsGlobalFilterEnabled>0</IsGlobalFilterEnabled><IsSortableEnabled>0</IsSortableEnabled>
+  <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings><CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
+  <IsDataSourceSecret>0</IsDataSourceSecret><AutoNumberFormat></AutoNumberFormat>
+  <IsSearchable>0</IsSearchable><IsFilterable>1</IsFilterable><IsRetrievable>1</IsRetrievable><IsLocalizable>0</IsLocalizable>
+  <Format>datetime</Format>
+  <displaynames><displayname description="Due Date" languagecode="1033" /></displaynames>
+  <Descriptions><Description description="" languagecode="1033" /></Descriptions>
+</attribute>
+<attribute PhysicalName="dvgen_status">
+  <Type>picklist</Type><Name>dvgen_status</Name><LogicalName>dvgen_status</LogicalName>
+  <RequiredLevel>none</RequiredLevel>
+  <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+  <ImeMode>auto</ImeMode>
+  <ValidForUpdateApi>1</ValidForUpdateApi><ValidForReadApi>1</ValidForReadApi><ValidForCreateApi>1</ValidForCreateApi>
+  <IsCustomField>1</IsCustomField><IsAuditEnabled>1</IsAuditEnabled><IsSecured>0</IsSecured>
+  <IntroducedVersion>1.0</IntroducedVersion><IsCustomizable>1</IsCustomizable><IsRenameable>1</IsRenameable>
+  <CanModifySearchSettings>1</CanModifySearchSettings><CanModifyRequirementLevelSettings>1</CanModifyRequirementLevelSettings>
+  <CanModifyAdditionalSettings>1</CanModifyAdditionalSettings><SourceType>0</SourceType>
+  <IsGlobalFilterEnabled>0</IsGlobalFilterEnabled><IsSortableEnabled>0</IsSortableEnabled>
+  <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings><CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
+  <IsDataSourceSecret>0</IsDataSourceSecret><AutoNumberFormat></AutoNumberFormat>
+  <IsSearchable>0</IsSearchable><IsFilterable>1</IsFilterable><IsRetrievable>1</IsRetrievable><IsLocalizable>0</IsLocalizable>
+  <optionset Name="dvgen_status">
+    <OptionSetType>picklist</OptionSetType><IsGlobal>0</IsGlobal><IsCustomizable>1</IsCustomizable>
+    <displaynames><displayname description="Status" languagecode="1033" /></displaynames>
+  <Descriptions><Description description="" languagecode="1033" /></Descriptions>
+    <options><option value="100000000"><labels><label description="Planned" languagecode="1033" /></labels><Descriptions><Description description="" languagecode="1033" /></Descriptions></option><option value="100000001"><labels><label description="Active" languagecode="1033" /></labels><Descriptions><Description description="" languagecode="1033" /></Descriptions></option><option value="100000002"><labels><label description="Done" languagecode="1033" /></labels><Descriptions><Description description="" languagecode="1033" /></Descriptions></option></options>
+  </optionset>
+  <displaynames><displayname description="Status" languagecode="1033" /></displaynames>
+  <Descriptions><Description description="" languagecode="1033" /></Descriptions>
+</attribute>
+<attribute PhysicalName="dvgen_Isactive">
+  <Type>bit</Type><Name>dvgen_isactive</Name><LogicalName>dvgen_isactive</LogicalName>
+  <RequiredLevel>none</RequiredLevel>
+  <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+  <ImeMode>auto</ImeMode>
+  <ValidForUpdateApi>1</ValidForUpdateApi><ValidForReadApi>1</ValidForReadApi><ValidForCreateApi>1</ValidForCreateApi>
+  <IsCustomField>1</IsCustomField><IsAuditEnabled>1</IsAuditEnabled><IsSecured>0</IsSecured>
+  <IntroducedVersion>1.0</IntroducedVersion><IsCustomizable>1</IsCustomizable><IsRenameable>1</IsRenameable>
+  <CanModifySearchSettings>1</CanModifySearchSettings><CanModifyRequirementLevelSettings>1</CanModifyRequirementLevelSettings>
+  <CanModifyAdditionalSettings>1</CanModifyAdditionalSettings><SourceType>0</SourceType>
+  <IsGlobalFilterEnabled>0</IsGlobalFilterEnabled><IsSortableEnabled>0</IsSortableEnabled>
+  <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings><CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
+  <IsDataSourceSecret>0</IsDataSourceSecret><AutoNumberFormat></AutoNumberFormat>
+  <IsSearchable>0</IsSearchable><IsFilterable>0</IsFilterable><IsRetrievable>0</IsRetrievable><IsLocalizable>0</IsLocalizable>
+  <AppDefaultValue>0</AppDefaultValue>
+  <optionset Name="dvgen_project_isactive">
+    <OptionSetType>bit</OptionSetType><IsGlobal>0</IsGlobal><IsCustomizable>1</IsCustomizable>
+    <displaynames><displayname description="Is Active" languagecode="1033" /></displaynames>
+  <Descriptions><Description description="" languagecode="1033" /></Descriptions>
+    <options>
+      <option value="1" ExternalValue="" IsHidden="0"><labels><label description="Yes" languagecode="1033" /></labels></option>
+      <option value="0" ExternalValue="" IsHidden="0"><labels><label description="No" languagecode="1033" /></labels></option>
+    </options>
+  </optionset>
+  <displaynames><displayname description="Is Active" languagecode="1033" /></displaynames>
+  <Descriptions><Description description="" languagecode="1033" /></Descriptions>
+</attribute>
+</attributes>
+<EntitySetName>dvgen_projects</EntitySetName>
+<IsDuplicateCheckSupported>1</IsDuplicateCheckSupported><IsBusinessProcessEnabled>0</IsBusinessProcessEnabled><IsRequiredOffline>0</IsRequiredOffline><IsInteractionCentricEnabled>0</IsInteractionCentricEnabled><IsCollaboration>0</IsCollaboration><AutoRouteToOwnerQueue>0</AutoRouteToOwnerQueue><IsConnectionsEnabled>0</IsConnectionsEnabled><EntityColor></EntityColor><IsDocumentManagementEnabled>0</IsDocumentManagementEnabled><AutoCreateAccessTeams>0</AutoCreateAccessTeams><IsOneNoteIntegrationEnabled>0</IsOneNoteIntegrationEnabled><IsKnowledgeManagementEnabled>0</IsKnowledgeManagementEnabled><IsSLAEnabled>0</IsSLAEnabled><IsDocumentRecommendationsEnabled>0</IsDocumentRecommendationsEnabled><IsBPFEntity>0</IsBPFEntity><OwnershipTypeMask>UserOwned</OwnershipTypeMask><IsAuditEnabled>0</IsAuditEnabled><IsRetrieveAuditEnabled>0</IsRetrieveAuditEnabled><IsRetrieveMultipleAuditEnabled>0</IsRetrieveMultipleAuditEnabled><IsActivity>0</IsActivity><ActivityTypeMask></ActivityTypeMask><IsActivityParty>0</IsActivityParty><IsReplicated>0</IsReplicated><IsReplicationUserFiltered>0</IsReplicationUserFiltered><IsMailMergeEnabled>1</IsMailMergeEnabled><IsVisibleInMobile>0</IsVisibleInMobile><IsVisibleInMobileClient>0</IsVisibleInMobileClient><IsReadOnlyInMobileClient>0</IsReadOnlyInMobileClient><IsOfflineInMobileClient>1</IsOfflineInMobileClient><DaysSinceRecordLastModified>0</DaysSinceRecordLastModified><MobileOfflineFilters></MobileOfflineFilters><IsMapiGridEnabled>1</IsMapiGridEnabled><IsReadingPaneEnabled>1</IsReadingPaneEnabled><IsQuickCreateEnabled>0</IsQuickCreateEnabled><SyncToExternalSearchIndex>0</SyncToExternalSearchIndex><IntroducedVersion>1.0</IntroducedVersion><IsCustomizable>1</IsCustomizable><IsRenameable>1</IsRenameable><IsMappable>1</IsMappable><CanModifyAuditSettings>1</CanModifyAuditSettings><CanModifyMobileVisibility>1</CanModifyMobileVisibility><CanModifyMobileClientVisibility>1</CanModifyMobileClientVisibility><CanModifyMobileClientReadOnly>1</CanModifyMobileClientReadOnly><CanModifyMobileClientOffline>1</CanModifyMobileClientOffline><CanModifyConnectionSettings>1</CanModifyConnectionSettings><CanModifyDuplicateDetectionSettings>1</CanModifyDuplicateDetectionSettings><CanModifyMailMergeSettings>1</CanModifyMailMergeSettings><CanModifyQueueSettings>1</CanModifyQueueSettings><CanCreateAttributes>1</CanCreateAttributes><CanCreateForms>1</CanCreateForms><CanCreateCharts>1</CanCreateCharts><CanCreateViews>1</CanCreateViews><CanModifyAdditionalSettings>1</CanModifyAdditionalSettings><CanEnableSyncToExternalSearchIndex>1</CanEnableSyncToExternalSearchIndex><EnforceStateTransitions>0</EnforceStateTransitions><CanChangeHierarchicalRelationship>1</CanChangeHierarchicalRelationship><EntityHelpUrlEnabled>0</EntityHelpUrlEnabled><ChangeTrackingEnabled>1</ChangeTrackingEnabled><CanChangeTrackingBeEnabled>1</CanChangeTrackingBeEnabled><IsEnabledForExternalChannels>0</IsEnabledForExternalChannels><IsMSTeamsIntegrationEnabled>0</IsMSTeamsIntegrationEnabled><IsSolutionAware>0</IsSolutionAware>
+</entity></EntityInfo>
+<RibbonDiffXml><CustomActions /><Templates><RibbonTemplates Id="Mscrm.Templates"></RibbonTemplates></Templates><CommandDefinitions /><RuleDefinitions><TabDisplayRules /><DisplayRules /><EnableRules /></RuleDefinitions><LocLabels /></RibbonDiffXml>
+<FormXml><forms type="main"><systemform><formid>{AF432A28-0CE3-527C-9A48-AE6E52A28139}</formid><IntroducedVersion>1.0</IntroducedVersion><FormPresentation>1</FormPresentation><FormActivationState>1</FormActivationState><form><tabs><tab verticallayout="true" id="{499A3143-6D30-554B-B9A6-AF1F91115A33}" IsUserDefined="1"><labels><label description="General" languagecode="1033" /></labels><columns><column width="100%"><sections><section showlabel="false" showbar="false" IsUserDefined="0" id="{53038B36-5111-518A-8C9A-9A4FFD576DAE}"><labels><label description="General" languagecode="1033" /></labels><rows><row><cell id="{C7C26C9B-DBC1-51CD-9AB8-F110A044FB4E}"><labels><label description="Name" languagecode="1033" /></labels><control id="dvgen_name" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="dvgen_name" /></cell></row><row><cell id="{187BC26D-280D-5C2E-9252-BAAEF82F03FC}"><labels><label description="Description" languagecode="1033" /></labels><control id="dvgen_description" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="dvgen_description" /></cell></row><row><cell id="{FD35197A-011A-5098-8A41-476204A838C4}"><labels><label description="Budget" languagecode="1033" /></labels><control id="dvgen_budget" classid="{C3EFE0C3-0EC6-42be-8349-CBD9079C717A}" datafieldname="dvgen_budget" /></cell></row><row><cell id="{17F7B411-A01D-5407-B6E0-D1B8D8EE5E5D}"><labels><label description="Headcount" languagecode="1033" /></labels><control id="dvgen_headcount" classid="{C3EFE0C3-0EC6-42be-8349-CBD9079C717A}" datafieldname="dvgen_headcount" /></cell></row><row><cell id="{2EBD2C35-AE73-5444-B512-2A5DBAD8F40D}"><labels><label description="Start Date" languagecode="1033" /></labels><control id="dvgen_startdate" classid="{5D68B988-0661-4db2-BC3E-17598AD3BE6C}" datafieldname="dvgen_startdate" /></cell></row><row><cell id="{FE250B65-E995-587C-B515-27F2A1492C9C}"><labels><label description="Due Date" languagecode="1033" /></labels><control id="dvgen_duedate" classid="{5D68B988-0661-4db2-BC3E-17598AD3BE6C}" datafieldname="dvgen_duedate" /></cell></row><row><cell id="{04B24CD5-191E-5822-9DDE-A609475FAAB9}"><labels><label description="Status" languagecode="1033" /></labels><control id="dvgen_status" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="dvgen_status" /></cell></row><row><cell id="{FDC6E525-DCAF-5347-B444-1E92493BA414}"><labels><label description="Is Active" languagecode="1033" /></labels><control id="dvgen_isactive" classid="{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}" datafieldname="dvgen_isactive" disabled="false" /></cell></row><row><cell id="{3BA01EAA-D907-5E67-8662-29619044216D}"><labels><label description="Owner" languagecode="1033" /></labels><control id="ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" /></cell></row></rows></section></sections></column></columns></tab></tabs></form><IsCustomizable>1</IsCustomizable><CanBeDeleted>1</CanBeDeleted><LocalizedNames><LocalizedName description="Information" languagecode="1033" /></LocalizedNames><Descriptions><Description description="" languagecode="1033" /></Descriptions></systemform></forms></FormXml>
+<SavedQueries><savedqueries><savedquery><IsCustomizable>1</IsCustomizable><CanBeDeleted>1</CanBeDeleted><isquickfindquery>0</isquickfindquery><isprivate>0</isprivate><isdefault>1</isdefault><savedqueryid>{0DECA905-C841-56CE-A1B2-99FCAFE66C86}</savedqueryid><layoutxml><grid name="resultset" jump="dvgen_name" select="1" icon="1" preview="1"><row name="result" id="dvgen_projectid"><cell name="dvgen_name" width="150"/><cell name="dvgen_description" width="150"/><cell name="dvgen_budget" width="150"/><cell name="dvgen_headcount" width="150"/><cell name="dvgen_startdate" width="150"/></row></grid></layoutxml><querytype>0</querytype><fetchxml><fetch version="1.0" mapping="logical"><entity name="dvgen_project"><attribute name="dvgen_projectid"/><attribute name="dvgen_name"/><attribute name="dvgen_description"/><attribute name="dvgen_budget"/><attribute name="dvgen_headcount"/><attribute name="dvgen_startdate"/><order attribute="dvgen_name" descending="false"/><filter type="and"><condition attribute="statecode" operator="eq" value="0"/></filter></entity></fetch></fetchxml><IntroducedVersion>1.0.0.0</IntroducedVersion><LocalizedNames><LocalizedName description="All Projects" languagecode="1033"/></LocalizedNames></savedquery><savedquery><IsCustomizable>1</IsCustomizable><CanBeDeleted>1</CanBeDeleted><isquickfindquery>1</isquickfindquery><isprivate>0</isprivate><isdefault>1</isdefault><savedqueryid>{9187A8C0-7A3F-5360-AABD-B246162D26DE}</savedqueryid><layoutxml><grid name="resultset" jump="dvgen_name" select="1" icon="1" preview="1"><row name="result" id="dvgen_projectid"><cell name="dvgen_name" width="150"/><cell name="dvgen_description" width="150"/><cell name="dvgen_budget" width="150"/><cell name="dvgen_headcount" width="150"/><cell name="dvgen_startdate" width="150"/></row></grid></layoutxml><querytype>4</querytype><fetchxml><fetch version="1.0" mapping="logical"><entity name="dvgen_project"><attribute name="dvgen_projectid"/><attribute name="dvgen_name"/><attribute name="dvgen_description"/><attribute name="dvgen_budget"/><attribute name="dvgen_headcount"/><attribute name="dvgen_startdate"/><order attribute="dvgen_name" descending="false"/><filter type="and"><condition attribute="statecode" operator="eq" value="0"/></filter><filter type="or" isquickfindfields="1"><condition attribute="dvgen_name" operator="like" value="{0}"/><condition attribute="dvgen_description" operator="like" value="{0}"/></filter></entity></fetch></fetchxml><IntroducedVersion>1.0.0.0</IntroducedVersion><LocalizedNames><LocalizedName description="Quick Find Projects" languagecode="1033"/></LocalizedNames></savedquery></savedqueries></SavedQueries>
+</Entity>
+<Entity>
+<Name LocalizedName="Task" OriginalName="Task">dvgen_task</Name>
+<EntityInfo><entity Name="dvgen_task">
+<LocalizedNames><LocalizedName description="Task" languagecode="1033" /></LocalizedNames>
+<LocalizedCollectionNames><LocalizedCollectionName description="Tasks" languagecode="1033" /></LocalizedCollectionNames>
+<Descriptions><Description description="" languagecode="1033" /></Descriptions>
+<attributes>
+<attribute PhysicalName="dvgen_name">
+  <Type>nvarchar</Type><Name>dvgen_name</Name><LogicalName>dvgen_name</LogicalName>
+  <RequiredLevel>none</RequiredLevel>
+  <DisplayMask>PrimaryName|ValidForAdvancedFind|ValidForForm|ValidForGrid|RequiredForForm</DisplayMask>
+  <ImeMode>auto</ImeMode>
+  <ValidForUpdateApi>1</ValidForUpdateApi><ValidForReadApi>1</ValidForReadApi><ValidForCreateApi>1</ValidForCreateApi>
+  <IsCustomField>1</IsCustomField><IsAuditEnabled>1</IsAuditEnabled><IsSecured>0</IsSecured>
+  <IntroducedVersion>1.0</IntroducedVersion><IsCustomizable>1</IsCustomizable><IsRenameable>1</IsRenameable>
+  <CanModifySearchSettings>1</CanModifySearchSettings><CanModifyRequirementLevelSettings>1</CanModifyRequirementLevelSettings>
+  <CanModifyAdditionalSettings>1</CanModifyAdditionalSettings><SourceType>0</SourceType>
+  <IsGlobalFilterEnabled>0</IsGlobalFilterEnabled><IsSortableEnabled>0</IsSortableEnabled>
+  <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings><CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
+  <IsDataSourceSecret>0</IsDataSourceSecret><AutoNumberFormat></AutoNumberFormat>
+  <IsSearchable>0</IsSearchable><IsFilterable>0</IsFilterable><IsRetrievable>0</IsRetrievable><IsLocalizable>0</IsLocalizable>
+  <Format>text</Format><MaxLength>100</MaxLength><Length>200</Length>
+  <displaynames><displayname description="Name" languagecode="1033" /></displaynames>
+  <Descriptions><Description description="" languagecode="1033" /></Descriptions>
+</attribute>
+<attribute PhysicalName="dvgen_hours">
+  <Type>decimal</Type><Name>dvgen_hours</Name><LogicalName>dvgen_hours</LogicalName>
+  <RequiredLevel>none</RequiredLevel>
+  <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+  <ImeMode>inactive</ImeMode>
+  <ValidForUpdateApi>1</ValidForUpdateApi><ValidForReadApi>1</ValidForReadApi><ValidForCreateApi>1</ValidForCreateApi>
+  <IsCustomField>1</IsCustomField><IsAuditEnabled>1</IsAuditEnabled><IsSecured>0</IsSecured>
+  <IntroducedVersion>1.0</IntroducedVersion><IsCustomizable>1</IsCustomizable><IsRenameable>1</IsRenameable>
+  <CanModifySearchSettings>1</CanModifySearchSettings><CanModifyRequirementLevelSettings>1</CanModifyRequirementLevelSettings>
+  <CanModifyAdditionalSettings>1</CanModifyAdditionalSettings><SourceType>0</SourceType>
+  <IsGlobalFilterEnabled>0</IsGlobalFilterEnabled><IsSortableEnabled>0</IsSortableEnabled>
+  <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings><CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
+  <IsDataSourceSecret>0</IsDataSourceSecret><AutoNumberFormat></AutoNumberFormat>
+  <IsSearchable>0</IsSearchable><IsFilterable>1</IsFilterable><IsRetrievable>1</IsRetrievable><IsLocalizable>0</IsLocalizable>
+  <Precision>2</Precision><MinValue>0</MinValue><MaxValue>100000000000</MaxValue>
+  <displaynames><displayname description="Hours" languagecode="1033" /></displaynames>
+  <Descriptions><Description description="" languagecode="1033" /></Descriptions>
+</attribute>
+<attribute PhysicalName="dvgen_priority">
+  <Type>picklist</Type><Name>dvgen_priority</Name><LogicalName>dvgen_priority</LogicalName>
+  <RequiredLevel>none</RequiredLevel>
+  <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+  <ImeMode>auto</ImeMode>
+  <ValidForUpdateApi>1</ValidForUpdateApi><ValidForReadApi>1</ValidForReadApi><ValidForCreateApi>1</ValidForCreateApi>
+  <IsCustomField>1</IsCustomField><IsAuditEnabled>1</IsAuditEnabled><IsSecured>0</IsSecured>
+  <IntroducedVersion>1.0</IntroducedVersion><IsCustomizable>1</IsCustomizable><IsRenameable>1</IsRenameable>
+  <CanModifySearchSettings>1</CanModifySearchSettings><CanModifyRequirementLevelSettings>1</CanModifyRequirementLevelSettings>
+  <CanModifyAdditionalSettings>1</CanModifyAdditionalSettings><SourceType>0</SourceType>
+  <IsGlobalFilterEnabled>0</IsGlobalFilterEnabled><IsSortableEnabled>0</IsSortableEnabled>
+  <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings><CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
+  <IsDataSourceSecret>0</IsDataSourceSecret><AutoNumberFormat></AutoNumberFormat>
+  <IsSearchable>0</IsSearchable><IsFilterable>1</IsFilterable><IsRetrievable>1</IsRetrievable><IsLocalizable>0</IsLocalizable>
+  <optionset Name="dvgen_priority">
+    <OptionSetType>picklist</OptionSetType><IsGlobal>0</IsGlobal><IsCustomizable>1</IsCustomizable>
+    <displaynames><displayname description="Priority" languagecode="1033" /></displaynames>
+  <Descriptions><Description description="" languagecode="1033" /></Descriptions>
+    <options><option value="100000000"><labels><label description="Low" languagecode="1033" /></labels><Descriptions><Description description="" languagecode="1033" /></Descriptions></option><option value="100000001"><labels><label description="Medium" languagecode="1033" /></labels><Descriptions><Description description="" languagecode="1033" /></Descriptions></option><option value="100000002"><labels><label description="High" languagecode="1033" /></labels><Descriptions><Description description="" languagecode="1033" /></Descriptions></option></options>
+  </optionset>
+  <displaynames><displayname description="Priority" languagecode="1033" /></displaynames>
+  <Descriptions><Description description="" languagecode="1033" /></Descriptions>
+</attribute>
+<attribute PhysicalName="dvgen_Done">
+  <Type>bit</Type><Name>dvgen_done</Name><LogicalName>dvgen_done</LogicalName>
+  <RequiredLevel>none</RequiredLevel>
+  <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+  <ImeMode>auto</ImeMode>
+  <ValidForUpdateApi>1</ValidForUpdateApi><ValidForReadApi>1</ValidForReadApi><ValidForCreateApi>1</ValidForCreateApi>
+  <IsCustomField>1</IsCustomField><IsAuditEnabled>1</IsAuditEnabled><IsSecured>0</IsSecured>
+  <IntroducedVersion>1.0</IntroducedVersion><IsCustomizable>1</IsCustomizable><IsRenameable>1</IsRenameable>
+  <CanModifySearchSettings>1</CanModifySearchSettings><CanModifyRequirementLevelSettings>1</CanModifyRequirementLevelSettings>
+  <CanModifyAdditionalSettings>1</CanModifyAdditionalSettings><SourceType>0</SourceType>
+  <IsGlobalFilterEnabled>0</IsGlobalFilterEnabled><IsSortableEnabled>0</IsSortableEnabled>
+  <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings><CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
+  <IsDataSourceSecret>0</IsDataSourceSecret><AutoNumberFormat></AutoNumberFormat>
+  <IsSearchable>0</IsSearchable><IsFilterable>0</IsFilterable><IsRetrievable>0</IsRetrievable><IsLocalizable>0</IsLocalizable>
+  <AppDefaultValue>0</AppDefaultValue>
+  <optionset Name="dvgen_task_done">
+    <OptionSetType>bit</OptionSetType><IsGlobal>0</IsGlobal><IsCustomizable>1</IsCustomizable>
+    <displaynames><displayname description="Done" languagecode="1033" /></displaynames>
+  <Descriptions><Description description="" languagecode="1033" /></Descriptions>
+    <options>
+      <option value="1" ExternalValue="" IsHidden="0"><labels><label description="Yes" languagecode="1033" /></labels></option>
+      <option value="0" ExternalValue="" IsHidden="0"><labels><label description="No" languagecode="1033" /></labels></option>
+    </options>
+  </optionset>
+  <displaynames><displayname description="Done" languagecode="1033" /></displaynames>
+  <Descriptions><Description description="" languagecode="1033" /></Descriptions>
+</attribute>
+</attributes>
+<EntitySetName>dvgen_tasks</EntitySetName>
+<IsDuplicateCheckSupported>1</IsDuplicateCheckSupported><IsBusinessProcessEnabled>0</IsBusinessProcessEnabled><IsRequiredOffline>0</IsRequiredOffline><IsInteractionCentricEnabled>0</IsInteractionCentricEnabled><IsCollaboration>0</IsCollaboration><AutoRouteToOwnerQueue>0</AutoRouteToOwnerQueue><IsConnectionsEnabled>0</IsConnectionsEnabled><EntityColor></EntityColor><IsDocumentManagementEnabled>0</IsDocumentManagementEnabled><AutoCreateAccessTeams>0</AutoCreateAccessTeams><IsOneNoteIntegrationEnabled>0</IsOneNoteIntegrationEnabled><IsKnowledgeManagementEnabled>0</IsKnowledgeManagementEnabled><IsSLAEnabled>0</IsSLAEnabled><IsDocumentRecommendationsEnabled>0</IsDocumentRecommendationsEnabled><IsBPFEntity>0</IsBPFEntity><OwnershipTypeMask>UserOwned</OwnershipTypeMask><IsAuditEnabled>0</IsAuditEnabled><IsRetrieveAuditEnabled>0</IsRetrieveAuditEnabled><IsRetrieveMultipleAuditEnabled>0</IsRetrieveMultipleAuditEnabled><IsActivity>0</IsActivity><ActivityTypeMask></ActivityTypeMask><IsActivityParty>0</IsActivityParty><IsReplicated>0</IsReplicated><IsReplicationUserFiltered>0</IsReplicationUserFiltered><IsMailMergeEnabled>1</IsMailMergeEnabled><IsVisibleInMobile>0</IsVisibleInMobile><IsVisibleInMobileClient>0</IsVisibleInMobileClient><IsReadOnlyInMobileClient>0</IsReadOnlyInMobileClient><IsOfflineInMobileClient>1</IsOfflineInMobileClient><DaysSinceRecordLastModified>0</DaysSinceRecordLastModified><MobileOfflineFilters></MobileOfflineFilters><IsMapiGridEnabled>1</IsMapiGridEnabled><IsReadingPaneEnabled>1</IsReadingPaneEnabled><IsQuickCreateEnabled>0</IsQuickCreateEnabled><SyncToExternalSearchIndex>0</SyncToExternalSearchIndex><IntroducedVersion>1.0</IntroducedVersion><IsCustomizable>1</IsCustomizable><IsRenameable>1</IsRenameable><IsMappable>1</IsMappable><CanModifyAuditSettings>1</CanModifyAuditSettings><CanModifyMobileVisibility>1</CanModifyMobileVisibility><CanModifyMobileClientVisibility>1</CanModifyMobileClientVisibility><CanModifyMobileClientReadOnly>1</CanModifyMobileClientReadOnly><CanModifyMobileClientOffline>1</CanModifyMobileClientOffline><CanModifyConnectionSettings>1</CanModifyConnectionSettings><CanModifyDuplicateDetectionSettings>1</CanModifyDuplicateDetectionSettings><CanModifyMailMergeSettings>1</CanModifyMailMergeSettings><CanModifyQueueSettings>1</CanModifyQueueSettings><CanCreateAttributes>1</CanCreateAttributes><CanCreateForms>1</CanCreateForms><CanCreateCharts>1</CanCreateCharts><CanCreateViews>1</CanCreateViews><CanModifyAdditionalSettings>1</CanModifyAdditionalSettings><CanEnableSyncToExternalSearchIndex>1</CanEnableSyncToExternalSearchIndex><EnforceStateTransitions>0</EnforceStateTransitions><CanChangeHierarchicalRelationship>1</CanChangeHierarchicalRelationship><EntityHelpUrlEnabled>0</EntityHelpUrlEnabled><ChangeTrackingEnabled>1</ChangeTrackingEnabled><CanChangeTrackingBeEnabled>1</CanChangeTrackingBeEnabled><IsEnabledForExternalChannels>0</IsEnabledForExternalChannels><IsMSTeamsIntegrationEnabled>0</IsMSTeamsIntegrationEnabled><IsSolutionAware>0</IsSolutionAware>
+</entity></EntityInfo>
+<RibbonDiffXml><CustomActions /><Templates><RibbonTemplates Id="Mscrm.Templates"></RibbonTemplates></Templates><CommandDefinitions /><RuleDefinitions><TabDisplayRules /><DisplayRules /><EnableRules /></RuleDefinitions><LocLabels /></RibbonDiffXml>
+<FormXml><forms type="main"><systemform><formid>{7E3B6211-A572-5876-84DE-3316B68A014D}</formid><IntroducedVersion>1.0</IntroducedVersion><FormPresentation>1</FormPresentation><FormActivationState>1</FormActivationState><form><tabs><tab verticallayout="true" id="{FFC4FB0C-00A9-557A-BF59-CA841979EAC0}" IsUserDefined="1"><labels><label description="General" languagecode="1033" /></labels><columns><column width="100%"><sections><section showlabel="false" showbar="false" IsUserDefined="0" id="{74EB6F5F-D899-54B1-B9FD-506D33CCA51B}"><labels><label description="General" languagecode="1033" /></labels><rows><row><cell id="{4E82A8D5-B0E8-5810-B58A-DCC82B6B93E0}"><labels><label description="Name" languagecode="1033" /></labels><control id="dvgen_name" classid="{4273EDBD-AC1D-40d3-9FB2-095C621B552D}" datafieldname="dvgen_name" /></cell></row><row><cell id="{2C25675A-F40B-5F3E-84FF-20220841DF2C}"><labels><label description="Hours" languagecode="1033" /></labels><control id="dvgen_hours" classid="{C3EFE0C3-0EC6-42be-8349-CBD9079C717A}" datafieldname="dvgen_hours" /></cell></row><row><cell id="{403FC698-3898-5D44-B71E-697FD08C3BDE}"><labels><label description="Priority" languagecode="1033" /></labels><control id="dvgen_priority" classid="{3EF39988-22BB-4f0b-BBBE-64B5A3748AEE}" datafieldname="dvgen_priority" /></cell></row><row><cell id="{C6676E4D-C2E0-5320-A778-71948EF2A9A1}"><labels><label description="Done" languagecode="1033" /></labels><control id="dvgen_done" classid="{67FAC785-CD58-4f9f-ABB3-4B7DDC6ED5ED}" datafieldname="dvgen_done" disabled="false" /></cell></row><row><cell id="{2A1EB694-C509-5774-A11E-70FCFC5B26AD}"><labels><label description="Owner" languagecode="1033" /></labels><control id="ownerid" classid="{270BD3DB-D9AF-4782-9025-509E298DEC0A}" datafieldname="ownerid" /></cell></row></rows></section></sections></column></columns></tab></tabs></form><IsCustomizable>1</IsCustomizable><CanBeDeleted>1</CanBeDeleted><LocalizedNames><LocalizedName description="Information" languagecode="1033" /></LocalizedNames><Descriptions><Description description="" languagecode="1033" /></Descriptions></systemform></forms></FormXml>
+<SavedQueries><savedqueries><savedquery><IsCustomizable>1</IsCustomizable><CanBeDeleted>1</CanBeDeleted><isquickfindquery>0</isquickfindquery><isprivate>0</isprivate><isdefault>1</isdefault><savedqueryid>{C6A7890D-C043-5CA6-A8EF-B7CE4D6CEA1C}</savedqueryid><layoutxml><grid name="resultset" jump="dvgen_name" select="1" icon="1" preview="1"><row name="result" id="dvgen_taskid"><cell name="dvgen_name" width="150"/><cell name="dvgen_hours" width="150"/><cell name="dvgen_priority" width="150"/><cell name="dvgen_done" width="150"/></row></grid></layoutxml><querytype>0</querytype><fetchxml><fetch version="1.0" mapping="logical"><entity name="dvgen_task"><attribute name="dvgen_taskid"/><attribute name="dvgen_name"/><attribute name="dvgen_hours"/><attribute name="dvgen_priority"/><attribute name="dvgen_done"/><order attribute="dvgen_name" descending="false"/><filter type="and"><condition attribute="statecode" operator="eq" value="0"/></filter></entity></fetch></fetchxml><IntroducedVersion>1.0.0.0</IntroducedVersion><LocalizedNames><LocalizedName description="All Tasks" languagecode="1033"/></LocalizedNames></savedquery><savedquery><IsCustomizable>1</IsCustomizable><CanBeDeleted>1</CanBeDeleted><isquickfindquery>1</isquickfindquery><isprivate>0</isprivate><isdefault>1</isdefault><savedqueryid>{FEDB4609-AC80-554D-8CF6-E2BA4FC84B24}</savedqueryid><layoutxml><grid name="resultset" jump="dvgen_name" select="1" icon="1" preview="1"><row name="result" id="dvgen_taskid"><cell name="dvgen_name" width="150"/><cell name="dvgen_hours" width="150"/><cell name="dvgen_priority" width="150"/><cell name="dvgen_done" width="150"/></row></grid></layoutxml><querytype>4</querytype><fetchxml><fetch version="1.0" mapping="logical"><entity name="dvgen_task"><attribute name="dvgen_taskid"/><attribute name="dvgen_name"/><attribute name="dvgen_hours"/><attribute name="dvgen_priority"/><attribute name="dvgen_done"/><order attribute="dvgen_name" descending="false"/><filter type="and"><condition attribute="statecode" operator="eq" value="0"/></filter><filter type="or" isquickfindfields="1"><condition attribute="dvgen_name" operator="like" value="{0}"/><condition attribute="dvgen_hours" operator="like" value="{0}"/></filter></entity></fetch></fetchxml><IntroducedVersion>1.0.0.0</IntroducedVersion><LocalizedNames><LocalizedName description="Quick Find Tasks" languagecode="1033"/></LocalizedNames></savedquery></savedqueries></SavedQueries>
+</Entity>
+</Entities>
+<optionsets />
+<CustomControls />
+<EntityDataProviders />
+<Languages><Language>1033</Language></Languages>
+<AppModuleSiteMaps><AppModuleSiteMap><SiteMapUniqueName>dvgen_fullapp</SiteMapUniqueName><EnableCollapsibleGroups>False</EnableCollapsibleGroups>
+<ShowHome>True</ShowHome><ShowPinned>True</ShowPinned><ShowRecents>True</ShowRecents>
+<SiteMap IntroducedVersion="7.0.0.0"><Area Id="area_dvgen_project" ResourceId="SitemapDesigner.NewTitle" DescriptionResourceId="SitemapDesigner.NewTitle" ShowGroups="true" IntroducedVersion="7.0.0.0"><Titles><Title LCID="1033" Title="Projects" /></Titles><Group Id="group_dvgen_project" ResourceId="SitemapDesigner.NewGroup" DescriptionResourceId="SitemapDesigner.NewGroup" IntroducedVersion="7.0.0.0" IsProfile="false" ToolTipResourseId="SitemapDesigner.Unknown"><SubArea Id="subarea_dvgen_project" Icon="/_imgs/imagestrips/transparent_spacer.gif" Entity="dvgen_project" Client="All,Outlook,OutlookLaptopClient,OutlookWorkstationClient,Web" AvailableOffline="true" PassParams="false" Sku="All,OnPremise,Live,SPLA" /></Group></Area><Area Id="area_dvgen_task" ResourceId="SitemapDesigner.NewTitle" DescriptionResourceId="SitemapDesigner.NewTitle" ShowGroups="true" IntroducedVersion="7.0.0.0"><Titles><Title LCID="1033" Title="Tasks" /></Titles><Group Id="group_dvgen_task" ResourceId="SitemapDesigner.NewGroup" DescriptionResourceId="SitemapDesigner.NewGroup" IntroducedVersion="7.0.0.0" IsProfile="false" ToolTipResourseId="SitemapDesigner.Unknown"><SubArea Id="subarea_dvgen_task" Icon="/_imgs/imagestrips/transparent_spacer.gif" Entity="dvgen_task" Client="All,Outlook,OutlookLaptopClient,OutlookWorkstationClient,Web" AvailableOffline="true" PassParams="false" Sku="All,OnPremise,Live,SPLA" /></Group></Area></SiteMap>
+<LocalizedNames><LocalizedName description="Dvgen Full App" languagecode="1033" /></LocalizedNames></AppModuleSiteMap></AppModuleSiteMaps>
+<AppModules><AppModule><UniqueName>dvgen_fullapp</UniqueName><IntroducedVersion>1.0.0.0</IntroducedVersion><WebResourceId>953b9fac-1e5e-e611-80d6-00155ded156f</WebResourceId>
+<OptimizedFor></OptimizedFor><statecode>0</statecode><statuscode>1</statuscode><FormFactor>1</FormFactor><ClientType>4</ClientType><NavigationType>0</NavigationType>
+<AppModuleComponents><AppModuleComponent type="1" schemaName="dvgen_project" /><AppModuleComponent type="1" schemaName="dvgen_task" /><AppModuleComponent type="62" schemaName="dvgen_fullapp" /></AppModuleComponents>
+<AppModuleRoleMaps /><LocalizedNames><LocalizedName description="Dvgen Full App" languagecode="1033" /></LocalizedNames>
+<Descriptions><Description description="Test app" languagecode="1033" /></Descriptions>
+<appsettings><appsetting settingdefinitionid.uniquename="AppChannel"><iscustomizable>1</iscustomizable><value>1</value></appsetting></appsettings></AppModule></AppModules>
+</ImportExportXml>
