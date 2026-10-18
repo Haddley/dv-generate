@@ -44,7 +44,9 @@ def load(d):
             vname = ln.get("description") if ln is not None else ""
             if SYSTEM_VIEW.match(vname):
                 continue
+            refs = {x.get("name") for x in v.iter("cell")} | {x.get("name") for x in v.iter("attribute")} | {x.get("attribute") for x in v.iter("condition")}
             t["views"][_guid(v.findtext("savedqueryid"))] = vname
+            t.setdefault("viewrefs", {})[_guid(v.findtext("savedqueryid"))] = {r for r in refs if r}
         for f in e.findall("FormXml//systemform"):
             ln = f.find("LocalizedNames/LocalizedName")
             t["forms"][_guid(f.findtext("formid"))] = {
@@ -99,6 +101,10 @@ def compare(repo, dev):
         for g in sorted(set(r["views"]) & set(d["views"])):
             if r["views"][g] != d["views"][g]:
                 f.append(("view name", "changed", f"{tn}: repo '{r['views'][g]}', dev '{d['views'][g]}'"))
+        for g in sorted(set(r["views"]) & set(d["views"])):
+            rr, dr = r.get("viewrefs", {}).get(g, set()), d.get("viewrefs", {}).get(g, set())
+            if rr != dr:
+                f.append(("view columns", "changed", f"{tn} view '{r['views'][g]}': dev also uses {sorted(dr - rr)}, dev lacks {sorted(rr - dr)}"))
         for g in sorted(set(d["forms"]) - set(r["forms"])):
             f.append(("form", "dev_only", f"{tn}: '{d['forms'][g]['name']}'"))
         for g in sorted(set(r["forms"]) - set(d["forms"])):
@@ -120,7 +126,7 @@ def compare(repo, dev):
 
 
 MANUAL = {
-    "column": "make.powerapps.com > Tables > {t} > Columns > {c} > Delete (deletes that column's data in dev)",
+    "column": "make.powerapps.com > Tables > {t} > Columns > {c} > Delete from this environment (deletes that column's data in dev)",
     "view": "make.powerapps.com > Tables > {t} > Views > {c} > Delete",
     "form": "make.powerapps.com > Tables > {t} > Forms > {c} > Delete",
     "option": "make.powerapps.com > Tables > {t} > Columns > {col} > edit the choices and remove option {c}",
@@ -146,6 +152,13 @@ def warnings_for(findings, repo):
 def manual_steps(findings):
     """What the user must still do in dev because the saved XML no longer has it. Returns (required, handled)."""
     required, handled = [], []
+    cols = [t.split(".", 1)[1] for k, s, t in findings if k == "column" and s == "dev_only"]
+    used = sorted({c for c in cols for k, s, t in findings if k in ("form fields", "view columns") and c in t})
+    if used:
+        required.append(
+            f"Dev still has {', '.join(used)} on a form or view that the saved XML no longer uses, and Dataverse blocks deleting a column while a form or view uses it "
+            "('Object dependencies exist'). Re-import the new zip into dev first: `pac solution import --path <zip> --environment <dev> --publish-changes`, "
+            "then run pull.py again and check the form and view differences are gone.")
     for kind, side, text in findings:
         if side != "dev_only":
             continue

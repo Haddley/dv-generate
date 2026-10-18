@@ -97,6 +97,7 @@ with tempfile.TemporaryDirectory() as tmp:
             check("ALL ITS ROWS" in out, "ai: removing a table must warn about data loss")
         if code == "ab":
             rc, out = run(r2, r1, "--manual")
+            check("pac solution import" in out and "--publish-changes" in out, "ab: when dev still uses the column on a form, the manual steps must say to re-import with pac first\n" + out)
             check("deletes that column's data" in out or "column's data" in out, "ab: removing a column must warn about data loss")
         print(f"ok   {code}: {desc}")
 
