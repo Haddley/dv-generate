@@ -1,6 +1,6 @@
 ---
 name: dv-generate
-description: Generate source-controlled, unmanaged Dataverse solution XML files (customizations.xml, solution.xml, pack.sh) without a live environment. Use when the user wants to create a new solution from scratch, add tables/fields/views/forms, or scaffold a model-driven app with AppModule and SiteMap. Also reports the manual steps needed in dev when a change cannot be made by regenerating, and pulls manual dev changes back into the saved XML. Always ask for the publisher prefix before generating any XML.
+description: Generate source-controlled, unmanaged Dataverse solution XML files (customizations.xml, solution.xml, pack.sh) without a live environment. Use when the user wants to create a new solution from scratch, add tables/fields/views/forms, or scaffold a model-driven app with AppModule and SiteMap. Adds and changes components by regenerating, does not remove them, and pulls manual dev changes back into the saved XML. Always ask for the publisher prefix before generating any XML.
 ---
 
 # Skill: Dataverse Solution Generation (Source-Controlled XML)
@@ -51,35 +51,40 @@ Results below come from the 16-scenario regeneration matrix in `tests/regen/` (u
 
 ### What regenerating does reliably
 
-Edit the saved XML in place, bump `<Version>`, import into dev (an overwrite), test, then export as managed and import into the sandbox as an **upgrade** (`pac solution import --path X.zip --stage-and-upgrade`). This worked on every path for:
+Edit the saved XML in place, bump `<Version>`, import into dev with `pac solution import --path X.zip --environment <dev> --publish-changes` (an overwrite), test, then export as managed and import into the sandbox as an **upgrade** (`pac solution import --path X.zip --stage-and-upgrade`). This worked on every path for:
 
 - adding a column, a picklist option, a table, an environment variable or a connection reference
 - changing a column label or an environment variable default
 
-### What regenerating cannot do: tell the user
+### Out of scope: removing components and changing a column's type
 
-Leaving something out of the XML does **not** remove it from the dev environment. When a change below is requested, say so and give the user the manual step. `scripts/drift.py <saved-dir> <dev-export-dir> --manual` prints the exact list.
+dv-generate does not remove anything and does not change a column's type. Leaving a component out of the saved XML does not remove it from dev, and dropping it from the XML would leave the XML and dev out of step. Do not do it quietly. When the user asks for a removal or a type change, say it is out of scope, leave that component in the XML, and tell them to make the change in the maker portal in dev and then bring it back with `pull.py` (below).
 
-| Change | What happens | What to tell the user |
-|---|---|---|
-| Remove a column, view, form or picklist option | Stays in dev and in the managed export, because `RootComponent behavior="0"` includes everything that exists on the table | Import the new zip into dev with `pac solution import --path X.zip --environment <dev> --publish-changes`, run `scripts/pull.py` and confirm no form or view still uses the column, then delete it in dev (make.powerapps.com > Tables) before exporting managed. In one test the portal's Import solution left the removed column on the form and the Quick Find view, and the delete then failed with "Object dependencies exist"; importing the same zip with pac removed it from both. Tested for a column and a view: after the dev delete, the version bump and the managed export, the upgrade removed both from the target. An upgrade is expected to delete the column's data (not tested; removing a whole table was tested and it deleted the rows). |
-| Change a column's type | Dataverse rejects the import ("Attribute … is a Decimal, but a Integer type was specified") | Add a new column, move the data, delete the old column |
-| Remove a table, environment variable, connection reference or app | Stays in the dev environment even if you leave it out of the zip | Delete the **unmanaged** solution wrapper (`pac solution delete --solution-name X`; never do this to a managed solution, which uninstalls it) and re-import, so the solution matches the zip. Delete the table in dev as well if it should not survive there. An upgrade then removes it in the target, and removing a table deletes all its rows. |
-| Remove a table while an app stays | The managed upgrade fails ("component cannot be deleted because it is referenced by 1 other components") | Remove the app in the same release; add it back (without the table) in the next release |
-| Deploy removals with a plain update | Nothing is removed in the target | Use `--stage-and-upgrade` |
+What the tests showed, so you can warn the user:
 
-Importing a release that removes a picklist option hung (15 min) on 2 of 4 attempts in testing; the option was not removed in dev either.
+- The solution includes everything that exists on a table (`RootComponent behavior="0"`), so a column, view, form or choice option left out of the XML stays in dev and in the managed export.
+- Dataverse refuses to delete a column while a form or view uses it ("Object dependencies exist"). After one portal import of a zip that no longer used the column, dev's form and Quick Find view still did.
+- Removing a table, environment variable, connection reference or app by deleting the solution wrapper and re-importing worked in testing, but a managed upgrade then deletes the table and **all its rows** in the target, and it fails if an app still references the table.
+- A plain update (not `--stage-and-upgrade`) removes nothing in the target.
+- Changing a column's type is rejected on import.
+- Importing a release that removes a choice option hung on 2 of 4 attempts.
 
 ### Rules when regenerating
 
 1. **Pull first** (below), so manual edits made in dev are not overwritten. An overwrite import replaces any view or form that shares a GUID with the saved XML.
 2. Edit the saved files in place. Never change a schema name or an existing GUID. Derive GUIDs from stable names (for example `uuid5` of the prefix, table and component name) so regenerating the same spec gives the same GUIDs.
-3. After regenerating, run `drift.py --manual`, relay every step and warning to the user (including: import the new zip into dev with `pac solution import --publish-changes` and check with `pull.py` that no form or view in dev still uses the column, before deleting anything), and wait for them to confirm the dev changes. Then run `scripts/pull.py` again to confirm it reports no drift, bump the version in dev (`pac solution online-version --solution-name X --solution-version 1.0.0.N --environment <dev>`) and export managed.
+3. Import into dev with `pac solution import --publish-changes`, bump the version in dev if needed (`pac solution online-version --solution-name X --solution-version 1.0.0.N --environment <dev>`), and export as managed.
 4. Import the same managed zip into the sandbox, then production.
 
-### Pulling manual changes back from dev
+### Bringing manual changes back from dev
 
-`scripts/pull.py --env <dev-url> --solution <UniqueName> --dir <SolutionDir>` exports the **unmanaged** solution from dev and reports what differs from the saved XML: tables, custom columns and their types, labels and options, views, forms (fields), environment variables, connection references and app tables. Platform system columns and system views are ignored. It changes nothing unless you add `--apply`, which replaces the saved XML with dev's export ("adopt dev as the source of truth"); review with `git diff`. It cannot read a managed solution. Use the report to fold the dev changes into the saved XML in the templates' style, or adopt the export wholesale.
+`scripts/pull.py --env <dev-url> --solution <UniqueName> --dir <SolutionDir>` exports the **unmanaged** solution from dev and reports what differs from the saved XML, in both directions: in dev but not in the saved XML, in the saved XML but not in dev, and different between the two. It compares tables, custom columns and their types, labels and options, views (name and columns), forms (fields), environment variables, connection references and app tables. Platform system columns and system views are ignored. It changes nothing unless you add `--apply`.
+
+- **Fold the changes in by hand:** use the report to edit the saved XML in the templates' style. The report names the components but does not generate the XML.
+- **Adopt dev wholesale:** `--apply` replaces `solution.xml`, `customizations.xml`, `[Content_Types].xml` and `environmentvariabledefinitions/` with dev's export. Review with `git diff`; commit first so you can undo. The export is the platform's XML, not the skill's templates (it includes system columns, for example), so later edits work on that XML and the template checks no longer apply. In testing, an adopted export re-imported cleanly and a second pull showed no drift.
+- **A removal made in dev** appears as "in the saved XML, not in dev". Remove it from the saved XML, or use `--apply`.
+
+Not compared: charts, dashboards, business rules, relationships, security roles, form scripts, and the site map beyond which tables an app lists. It cannot read a managed solution, so it only works against the unmanaged copy in dev.
 
 ---
 

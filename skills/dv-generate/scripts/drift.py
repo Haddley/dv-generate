@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """Compare a saved (source-controlled) solution folder with an unmanaged export from the dev environment.
 
-  drift.py <repo_dir> <dev_dir>              what differs, and on which side
-  drift.py <repo_dir> <dev_dir> --manual     only the manual steps still needed in dev before exporting managed
+  drift.py <repo_dir> <dev_dir>     what differs, and on which side
 
 <repo_dir> and <dev_dir> are folders containing solution.xml and customizations.xml (the root of the zip).
 Exit code 0 = identical on everything compared; 1 = differences found.
@@ -125,63 +124,6 @@ def compare(repo, dev):
     return f
 
 
-MANUAL = {
-    "column": "make.powerapps.com > Tables > {t} > Columns > {c} > Delete from this environment (deletes that column's data in dev)",
-    "view": "make.powerapps.com > Tables > {t} > Views > {c} > Delete",
-    "form": "make.powerapps.com > Tables > {t} > Forms > {c} > Delete",
-    "option": "make.powerapps.com > Tables > {t} > Columns > {col} > edit the choices and remove option {c}",
-}
-
-
-def warnings_for(findings, repo):
-    """Risks of the managed upgrade that follows, from what the matrix tests showed."""
-    w = []
-    tables = [t for k, s, t in findings if k == "table" and s == "dev_only"]
-    cols = [t for k, s, t in findings if k == "column" and s == "dev_only"]
-    if tables and repo["apps"]:
-        w.append(f"Table(s) {', '.join(tables)} are being removed but the saved XML still contains an app ({', '.join(repo['apps'])}). "
-                 "A managed upgrade fails while the app remains ('component cannot be deleted because it is referenced by 1 other components'). "
-                 "Remove the app in the same release (it can be added back in the next one).")
-    if tables:
-        w.append("Removing a table in a managed upgrade deletes the table and ALL ITS ROWS in the target environment. Back up the data first.")
-    if cols:
-        w.append("After you delete a column in dev, a managed upgrade removes it from the target, and is expected to delete that column's data (data effect not tested). A plain update (not an upgrade) removes nothing.")
-    return w
-
-
-def manual_steps(findings):
-    """What the user must still do in dev because the saved XML no longer has it. Returns (required, handled)."""
-    required, handled = [], []
-    cols = [t.split(".", 1)[1] for k, s, t in findings if k == "column" and s == "dev_only"]
-    used = sorted({c for c in cols for k, s, t in findings if k in ("form fields", "view columns") and c in t})
-    if used:
-        required.append(
-            f"Dev still has {', '.join(used)} on a form or view that the saved XML no longer uses, and Dataverse blocks deleting a column while a form or view uses it "
-            "('Object dependencies exist'). Re-import the new zip into dev first: `pac solution import --path <zip> --environment <dev> --publish-changes`, "
-            "then run pull.py again and check the form and view differences are gone.")
-    for kind, side, text in findings:
-        if side != "dev_only":
-            continue
-        if kind == "column":
-            t, c = text.split(".", 1)
-            required.append(f"Delete column '{c}' on table '{t}'. " + MANUAL["column"].format(t=t, c=c))
-        elif kind == "view":
-            t, c = text.split(": ", 1)
-            required.append(f"Delete view {c} on table '{t}'. " + MANUAL["view"].format(t=t, c=c))
-        elif kind == "form":
-            t, c = text.split(": ", 1)
-            required.append(f"Delete form {c} on table '{t}'. " + MANUAL["form"].format(t=t, c=c))
-        elif kind == "option":
-            tc, v = text.split(": ", 1)
-            t, col = tc.split(".", 1)
-            required.append(f"Remove option {v} from '{col}' on table '{t}'. " + MANUAL["option"].format(t=t, col=col, c=v.split(' ')[0]))
-        elif kind == "table":
-            handled.append(f"Table '{text}' is not in the saved XML: re-import after deleting the solution wrapper (unmanaged solutions only) to drop it from the solution. The table and its data stay in dev until you delete it.")
-        elif kind in ("env var", "connection reference", "app"):
-            handled.append(f"{kind.capitalize()} '{text}' is not in the saved XML: re-importing after deleting the solution wrapper drops it from the solution.")
-    return required, handled
-
-
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     if len(args) != 2:
@@ -189,25 +131,6 @@ def main():
         return 2
     repo, dev = load(args[0]), load(args[1])
     findings = compare(repo, dev)
-    if "--manual" in sys.argv:
-        required, handled = manual_steps(findings)
-        warns = warnings_for(findings, repo)
-        if not required and not handled and not warns:
-            print("No manual steps needed in dev.")
-            return 0
-        if required:
-            print("Manual steps needed in dev BEFORE you export as managed (otherwise these stay in the solution):")
-            for i, r in enumerate(required, 1):
-                print(f"  {i}. {r}")
-        if handled:
-            print("Handled by re-importing after deleting the unmanaged solution wrapper:")
-            for h in handled:
-                print("  - " + h)
-        if warns:
-            print("Warnings for the managed upgrade:")
-            for w in warns:
-                print("  ! " + w)
-        return 1 if (required or warns) else 0
     if not findings:
         print("No drift: the saved XML and the dev export agree on tables, columns, options, views, forms, env vars, connection references and apps.")
         return 0

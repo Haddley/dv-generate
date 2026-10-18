@@ -5,7 +5,7 @@ For every scenario, release 1 stands in for dev and release 2 for the regenerate
   - identical folders        -> exit 0
   - repo = r2, dev = r1       -> the expected drift is reported (this is what dev looks like after a removal)
   - repo = r1, dev = r2       -> the reverse (this is what dev looks like after someone adds it by hand)
-  - --manual on removals      -> the right manual step is named
+  - a removed column          -> the form and view that still use it are reported too
 Usage: test_drift.py
 """
 import os
@@ -20,22 +20,22 @@ import scenarios  # noqa: E402
 
 DRIFT = os.path.join(ROOT, "skills", "dv-generate", "scripts", "drift.py")
 
-# code -> (expected finding present when repo=r2, dev=r1: "[kind]" , side heading, manual step text or None)
+# code -> (expected finding present when repo=r2, dev=r1: "[kind]", side heading)
 EXPECT = {
-    "aa": ("[column]", "In the saved XML, not in dev", None),
-    "ab": ("[column]", "In dev, not in the saved XML", "Delete column 'dvgab_amount'"),
-    "ac": ("[column label]", "Different between the two", None),
-    "ad": ("[option]", "In the saved XML, not in dev", None),
-    "ae": ("[option]", "In dev, not in the saved XML", "Remove option"),
-    "af": ("[column type]", "Different between the two", None),
-    "ag": ("[table]", "In the saved XML, not in dev", None),
-    "ah": ("[table]", "In dev, not in the saved XML", "Table 'dvgah_beta'"),
-    "ai": ("[app]", "In dev, not in the saved XML", "App 'dvgai_app'"),
-    "ak": ("[view]", "In dev, not in the saved XML", "Delete view 'All Alphas ak'"),
-    "al": ("[env var]", "In the saved XML, not in dev", None),
-    "am": ("[connection reference]", "In dev, not in the saved XML", "Connection reference 'dvgam_cr1'"),
-    "an": ("[env var value]", "Different between the two", None),
-    "ao": ("[app]", "In dev, not in the saved XML", "App 'dvgao_app'"),
+    "aa": ("[column]", "In the saved XML, not in dev"),
+    "ab": ("[column]", "In dev, not in the saved XML"),
+    "ac": ("[column label]", "Different between the two"),
+    "ad": ("[option]", "In the saved XML, not in dev"),
+    "ae": ("[option]", "In dev, not in the saved XML"),
+    "af": ("[column type]", "Different between the two"),
+    "ag": ("[table]", "In the saved XML, not in dev"),
+    "ah": ("[table]", "In dev, not in the saved XML"),
+    "ai": ("[app]", "In dev, not in the saved XML"),
+    "ak": ("[view]", "In dev, not in the saved XML"),
+    "al": ("[env var]", "In the saved XML, not in dev"),
+    "am": ("[connection reference]", "In dev, not in the saved XML"),
+    "an": ("[env var value]", "Different between the two"),
+    "ao": ("[app]", "In dev, not in the saved XML"),
 }
 
 
@@ -75,30 +75,17 @@ with tempfile.TemporaryDirectory() as tmp:
         check(rc == 0 and "No drift" in out, f"{code}: identical folders should report no drift\n{out}")
         if code not in EXPECT:
             continue
-        kind, heading, manual = EXPECT[code]
+        kind, heading = EXPECT[code]
         rc, out = run(r2, r1)
         check(rc == 1, f"{code}: repo=r2 dev=r1 should report drift (exit {rc})")
         check(kind in section(out, heading), f"{code}: expected {kind} under '{heading}'\n{out}")
         rc, out = run(r1, r2)  # reversed: the side flips for add/remove, 'changed' stays
         flip = {"In dev, not in the saved XML": "In the saved XML, not in dev", "In the saved XML, not in dev": "In dev, not in the saved XML"}
         check(kind in section(out, flip.get(heading, heading)), f"{code}: reversed run should report {kind} under '{flip.get(heading, heading)}'\n{out}")
-        rc, out = run(r2, r1, "--manual")
-        if manual:
-            check(manual in out, f"{code}: --manual should mention '{manual}'\n{out}")
-        else:
-            check("No manual steps" in out, f"{code}: --manual should report no manual steps\n{out}")
-        if code == "ah":
-            rc, out = run(r2, r1, "--manual")
-            check("fails while the app remains" in out, "ah: removing a table while an app remains must warn that the upgrade will fail\n" + out)
-            check("ALL ITS ROWS" in out, "ah: removing a table must warn about data loss")
-        if code == "ai":
-            rc, out = run(r2, r1, "--manual")
-            check("fails while the app remains" not in out, "ai: app is removed too, so there must be no app warning\n" + out)
-            check("ALL ITS ROWS" in out, "ai: removing a table must warn about data loss")
         if code == "ab":
-            rc, out = run(r2, r1, "--manual")
-            check("pac solution import" in out and "--publish-changes" in out, "ab: when dev still uses the column on a form, the manual steps must say to re-import with pac first\n" + out)
-            check("deletes that column's data" in out or "column's data" in out, "ab: removing a column must warn about data loss")
+            rc, out = run(r2, r1)
+            check("[form fields]" in out and "dvgab_amount" in out, "ab: a form that still uses the removed column must be reported\n" + out)
+            check("[view columns]" in out, "ab: a view that still uses the removed column must be reported\n" + out)
         print(f"ok   {code}: {desc}")
 
 print("\nALL DRIFT TESTS PASSED" if not fails else f"\n{fails} DRIFT TEST(S) FAILED")
