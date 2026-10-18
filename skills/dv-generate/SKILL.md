@@ -63,11 +63,12 @@ dv-generate does not remove anything and does not change a column's type. Leavin
 What the tests showed, so you can warn the user:
 
 - The solution includes everything that exists on a table (`RootComponent behavior="0"`), so a column, view, form or choice option left out of the XML stays in dev and in the managed export.
-- Dataverse refuses to delete a column while a form or view uses it ("Object dependencies exist"). After one portal import of a zip that no longer used the column, dev's form and Quick Find view still did.
+- Dataverse refuses to delete a column while a form or view uses it ("Object dependencies exist"). An import without `--publish-changes` leaves the published form and views as they were: in a pac test the published form and views still used the removed column after the import, and `pac solution publish` cleared them. In one portal run, clicking Publish all customizations did not clear the dependency (cause unknown); re-importing the zip with `pac ... --publish-changes` did.
 - Removing a table, environment variable, connection reference or app by deleting the solution wrapper and re-importing worked in testing, but a managed upgrade then deletes the table and **all its rows** in the target, and it fails if an app still references the table.
 - A plain update (not `--stage-and-upgrade`) removes nothing in the target.
 - Changing a column's type is rejected on import.
-- Importing a release that removes a choice option hung on 2 of 4 attempts.
+- A column deleted in dev (after the import was published), exported as managed and upgraded into the target was removed from the target. Its values went with it, and the records and their other columns survived.
+- Importing a release that removed a choice option hung on 2 of 4 early attempts and on 0 of 5 later ones, so treat it as intermittent slowness. The option stays in dev either way.
 
 ### Rules when regenerating
 
